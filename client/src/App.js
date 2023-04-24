@@ -1,22 +1,23 @@
 import React from "react";
-import { Tooltip, Button } from "flowbite-react";
+import { Routes, Route } from "react-router-dom"
 import "./App.css";
 import Login from "./pages/Login";
 
+import Home from "./pages/Home";
 
 
 function App() {
+  // const [darkMode, setDarkMode] = React.useState(true)
+  // function toggleDarkMode() {
+  //   setDarkMode(prevDarkMode => !prevDarkMode)
+// }
   return (
     <>
-    <Login/>
-      <div className="flex gap-2">
-        <Tooltip content="Tooltip content" style="light">
-          <Button>Light tooltip</Button>
-        </Tooltip>
-        <Tooltip content="Tooltip content" style="dark">
-          <Button>Dark tooltip</Button>
-        </Tooltip>
-      </div>
+    <Routes>
+      <Route path="/login" element={<Login/>}/>
+      <Route path="/" element={<Home/>}/>
+    </Routes>
+    
     </>
   );
 }
