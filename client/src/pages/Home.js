@@ -5,7 +5,7 @@ import Filters from '../components/Filters'
 const Home = () => {
   
   return (
-    <div className="bg-center bg-bghome h-screen w-screen flex flex-col items-center">
+    <div className=" h-screen w-screen flex flex-col items-center">
       <Navbar/>
       <Filters/>
       <Posts/>

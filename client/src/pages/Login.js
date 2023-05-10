@@ -1,42 +1,66 @@
 import React, { useState } from "react";
-import { Label, TextInput, Checkbox, Button, Carousel } from "flowbite-react";
+import { Label, TextInput, Checkbox } from "flowbite-react";
 import CreateAccount from "./CreateAccount";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate()
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-	const loginPage = (event) => {
-    event.preventDefault()
-		axios.post("http://localhost:8000/auth", {
-			username: username,
-      password: password
-		}).then(function (response) {
-			console.log(response)
-      // alert('correct password')
-      navigate('/')
-      
-		}).catch(function (error) {
-			console.log(error)
-      alert('wrong password')
-		})
-  }
+  const navigate = useNavigate();
+  // const [username, setUsername] = useState('')
+  // const [email, setEmail] = useState('')
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleChangeUsername = (event => {
-    setUsername(event.target.value)
-  })
+  // const loginPage = async event => {
+  //   event.preventDefault()
+  //   try {
+  //     const response = await axios.post('http://localhost:8000/auth', {
+  //       username: username,
+  //       password: password,
+  //     })
 
-  const handleChangePassword = (event => {
-    setPassword(event.target.value)
-  })
+  //     console.log(response)
+  //     navigate('/')
+  //   } catch (error) {
+  //     console.log(error)
+  //     alert(error.response.data)
+  //   }
+  // }
 
+  const loginPage = (event) => {
+    event.preventDefault();
+
+    axios
+      .post("http://localhost:8000/auth", {
+        // username: username,
+        // email: email,
+        usernameOrEmail: name,
+        password: password,
+      })
+      .then(function (response) {
+        console.log(response);
+        navigate("/");
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert(error.response.data);
+      });
+  };
+
+  const handleChange = (event) => {
+    // setUsername(event.target.value)
+    // setEmail(event.target.value)
+    setName(event.target.value);
+  };
+
+  const handleChangePassword = (event) => {
+    setPassword(event.target.value);
+  };
 
   return (
-    <div className="h-screen flex">
-  <div className="h-full w-1/2">
-    <Carousel>
+    <div className="h-screen flex bg-bglogin bg-cover">
+      <div className="h-full w-1/2">
+        {/* <Carousel>
       <img
         src="https://i.pinimg.com/originals/d4/b2/75/d4b275b49306f9b1d1c9b56a98a48878.gif"
         alt="..."
@@ -62,50 +86,89 @@ const Login = () => {
         alt="..."
         className="w-full h-full object-fit-contain brightness-75"
       />
-    </Carousel>
-    <div className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 z-10 text-white text-base italic ... font-bold">
-        Connect with people through Hangouts or Sports in your area.
+    </Carousel> */}
       </div>
-  </div>
-<div className="absolute top-0 right-0 w-25 ... font-snow p-5 text-transparent bg-clip-text bg-gradient-to-l from-cyan-500 to-blue-500">
-      ChillOut
-    </div>
-  
-  <div className="h-full w-1/2 flex items-center justify-center bg-gradient-to-b from-white to-blue-400">
-    
-    <form className="flex flex-col gap-4" >
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="email1" value="Email/Username" />
-        </div>
-        <TextInput className='w-80 border-x-0'
-          id="email1"
-          type="email"
-          placeholder="Enter username or email"
-          onChange={handleChangeUsername}
-          required={true}
+      <div className="absolute top-32 right-64 w-80 ...">
+        <img
+          src="https://cdn.discordapp.com/attachments/818821918303715350/1105451216223354910/logo.png"
+          alt=""
         />
       </div>
-      <div>
-        <div className="mt-4 mb-2 block">
-          <Label htmlFor="password1" value="Password" />
-        </div>
-        <TextInput id="password1" type="password" placeholder="Enter password" onChange={handleChangePassword} required={true} />
-      </div>
-      <div className="flex items-center gap-2 mb-2">
-        <Checkbox id="remember" />
-        <Label className="me-20" htmlFor="remember">Remember me</Label>
-        <button className="underline text-sm"> Forgot password? </button>
-      </div>
-      
-      <Button onClick={loginPage}className="bg-neutral-950 flex" type="submit" href="/">
-        Log in
-      </Button>
-      <span className="text-center">Don't have an account? <CreateAccount/>  </span>
-    </form>
-  </div>
-</div>
 
+      <div className="absolute top-72 right-5 transform -translate-x-1/2 -translate-y-1/2 z-10 text-white font-gsr text-lg ...">
+        <p>
+          connect with people through <span id="yellow">hangouts</span> in your
+          area
+        </p>
+      </div>
+      <div className="h-full w-1/2 flex items-center justify-center">
+        <form className="flex flex-col gap-4">
+          <div className="-ml-10 mt-56">
+            <div className="mb-2 block">
+              <Label
+                className="text-zinc-300 text-xs font-gsr"
+                htmlFor="email1"
+                value="Username or Email"
+              />
+            </div>
+            <TextInput
+              className="w-80"
+              id="email1"
+              type="email"
+              placeholder="Enter username or email"
+              onChange={handleChange}
+              required={true}
+            />
+          </div>
+          <div className="-ml-10">
+            <div className="mb-2 block">
+              <Label
+                className="text-zinc-300 text-xs font-gsr"
+                htmlFor="password1"
+                value="Password"
+              />
+            </div>
+            <TextInput
+              className="w-80"
+              id="password1"
+              type="password"
+              placeholder="Enter password"
+              onChange={handleChangePassword}
+              required={true}
+            />
+          </div>
+          <div className="flex items-center gap-2 mb-2 mt-2 -ml-10">
+            <Checkbox id="remember" />
+            <Label
+              className="text-zinc-300 me-20 text-xs font-gsr mt-2"
+              htmlFor="remember"
+            >
+              Remember me
+            </Label>
+            <button
+              id="yellow"
+              className="underline text-xs ml-9 font-gsr font-bold mt-2"
+            >
+              {" "}
+              Forgot password?{" "}
+            </button>
+          </div>
+
+          <button
+            onClick={loginPage}
+            id="ybut"
+            className="flex text-zinc-300 justify-center rounded w-32 h-10 ml-14 pt-3 font-gsr font-bold text-base"
+            type="submit"
+            href="/home"
+          >
+            Log in
+          </button>
+          <span className="text-center text-zinc-300 text-xs font-gsr font-bold -ml-8 mt-4">
+            Don't have an account? <CreateAccount />{" "}
+          </span>
+        </form>
+      </div>
+    </div>
   );
 };
 

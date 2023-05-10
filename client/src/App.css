@@ -37,3 +37,40 @@
   }
 }
 
+#filthis{
+  background-color: rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  /* box-shadow: 0px 0px 8px 4px rgba(121,45,195,0.7); */
+}
+
+#password1{
+  background-color: rgba(0, 0, 0, 0);
+  color: #FAFAFA;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+#email1{
+  background-color: rgba(0, 0, 0, 0);
+  color: #FAFAFA;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+#ns{
+  font-family: 'Noto Sans', sans-serif;
+}
+
+#yellow{
+  color: #FFC24D;
+}
+
+#ybut{
+  background-color: #FFB72E;
+  color: #FFFFFF;
+}
+#remember{
+  background-color: rgba(0,0,0, 0);
+}

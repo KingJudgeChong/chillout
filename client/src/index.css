@@ -4,9 +4,11 @@
 @import url("./styles/output.css");
 
 @font-face {
-  font-family: "SNOW";
-  src: url("C:\Users\kingj\OneDrive\Desktop\mymodules\chillout-webapp\snow-blue-font\SnowBlue-OVVwd.otf");
+  font-family: "Grantha Sangam MN";
+  src: url("C:\Users\kingj\OneDrive\Desktop\capstone project\chillout\client\public\grantha-sangam-mn-regular-maisfontes.866d\grantha-sangam-mn-regular.otf");
 }
+
+
 
 body {
   margin: 0;
@@ -15,6 +17,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url(https://i.pinimg.com/originals/2d/97/4d/2d974d71915c2bf72d30ef60f8731267.gif), url(https://img.freepik.com/premium-photo/abstract-white-mosaic-tile-texture-background_293060-16321.jpg?w=1060);
+  /* https://i.pinimg.com/originals/79/71/dd/7971dd8d68580f3cc88ff5ec41271687.gif */
+  background-attachment: fixed;
+  background-position: center;
+  background-blend-mode: screen;
 }
 
 code {

@@ -6,11 +6,18 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        bghome: "url('https://img.freepik.com/premium-photo/abstract-white-mosaic-tile-texture-background_293060-16321.jpg?w=1060')",
+        bghome: "url('https://i.pinimg.com/originals/94/51/6c/94516cc63d94e695bc255da865c251c4.gif')",
+        bglogin: "url('/src/bg@2x.png')"
       },
       fontFamily: {
-        snow: ["SNOW", "cursive"],
+        gsr: ["Grantha Sangam MN", "Regular"],
+        gsb: ["Grantha Sangam MN", "Bold"],
       },
+      backgroundOpacity: {
+        '10': '0.1',
+        '20': '0.2',
+        '95': '0.95',
+      }
     },
   },
   plugins: [require('flowbite/plugin')],
