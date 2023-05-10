@@ -1,4 +1,5 @@
-
+<div class='nothing'>
+<div class='bg'>
 <a name="readme-top"></a>
 
 [![Contributors][contributors-shield]][contributors-url]
@@ -16,10 +17,10 @@
     <img src="https://avatars.githubusercontent.com/u/125765537?v=4" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">MY-README-TEMPLATE</h3>
+  <h3 align="center">Rawr!</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    An awesome Capstone Project sheesh!
     <br />
     <a href="https://github.com/KingJudgeChong/chillout#readme"><strong>Explore the docs »</strong></a>
     <br />
@@ -70,17 +71,16 @@
 
 
 
-Use the `BLANK_README.md` to get started.
-
-
-
 
 ### Built With
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
 <!-- * [![Next][Next.js]][Next-url] -->
+* [![VSCode][VSCode]][VSCode_url]
+* [![Javascript][Javascript]][Javascript_url]
 * [![React][React.js]][React-url]
+* [![Node][Node.js]][Node_url]
 <!-- * [![Vue][Vue.js]][Vue-url] -->
 <!-- * [![Angular][Angular.io]][Angular-url] -->
 <!-- * [![Svelte][Svelte.dev]][Svelte-url] -->
@@ -189,7 +189,7 @@ Use this space to list resources you find helpful and would like to give credit 
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/kingjudgechong
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: https://cdn.discordapp.com/attachments/818821918303715350/1105451216223354910/logo.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
@@ -204,5 +204,218 @@ Use this space to list resources you find helpful and would like to give credit 
 [Laravel-url]: https://laravel.com
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
 [Bootstrap-url]: https://getbootstrap.com
-[Postgresql.org]: https://example.com
+[Postgresql.org]: https://img.shields.io/badge/Postgresql-232F3E?style=for-the-badge&logo=postgresql&logoColor=4169E1
 [Postgresql_url]: https://www.postgresql.org/ 
+[Node.js]: https://img.shields.io/badge/Node.js-231F20?style=for-the-badge&logo=node.js&logoColor=339933
+[Node_url]: https://nodejs.org/en 
+
+
+[VSCode]: https://img.shields.io/badge/VisualStudioCode-173B3F?style=for-the-badge&logo=visualstudiocode&logoColor=007ACC
+[VSCode_url]: https://code.visualstudio.com/
+
+
+[Javascript]: https://img.shields.io/badge/Javascript-1A1F71?style=for-the-badge&logo=javascript&logoColor=F7DF1E
+[Javascript_url]: https://www.javascript.com/
+
+
+<style>
+
+
+marquee {
+  font-family: Oswald;
+  font-size: 75px;
+   animation: Color 4s linear infinite;
+  -webkit-animation: Color 4s ease-in-out infinite;
+  text-shadow: 3px 3px #888888;
+}
+
+@keyframes Color{
+  0%{
+    color:#A0D468;
+  }
+  
+  20%{
+    color:#4FC1E9;
+  }
+  
+  40%{
+    color:#FFCE54;
+  }
+  
+  60%{
+    color:#FC6E51;
+  }
+  
+  80%{
+    color:#ED5565;
+  }
+  
+  100%{
+    color:#AC92EC;
+  }
+}
+
+@-moz-keyframes Color{
+  0%{
+    color:#A0D468;
+  }
+  
+  20%{
+    color:#4FC1E9;
+  }
+  
+  40%{
+    color:#FFCE54;
+  }
+  
+  60%{
+    color:#FC6E51;
+  }
+  
+  80%{
+    color:#ED5565;
+  }
+  
+  100%{
+    color:#AC92EC;
+  }
+}
+
+@-webkit-keyframes Color{
+  0%{
+    color:#A0D468;
+  }
+  
+  20%{
+    color:#4FC1E9;
+  }
+  
+  40%{
+    color:#FFCE54;
+  }
+  
+  60%{
+    color:#FC6E51;
+  }
+  
+  80%{
+    color:#ED5565;
+  }
+  
+  100%{
+    color:#AC92EC;
+  }
+}
+#trythis
+{
+  font-family: Oswald;
+  font-size: 75px;
+   animation: Color 4s linear infinite;
+  -webkit-animation: Color 4s ease-in-out infinite;
+  text-shadow: 3px 3px #888888;
+}
+
+@keyframes Color{
+  0%{
+    color:#A0D468;
+  }
+  
+  20%{
+    color:#4FC1E9;
+  }
+  
+  40%{
+    color:#FFCE54;
+  }
+  
+  60%{
+    color:#FC6E51;
+  }
+  
+  80%{
+    color:#ED5565;
+  }
+  
+  100%{
+    color:#AC92EC;
+  }
+}
+
+@-moz-keyframes Color{
+  0%{
+    color:#A0D468;
+  }
+  
+  20%{
+    color:#4FC1E9;
+  }
+  
+  40%{
+    color:#FFCE54;
+  }
+  
+  60%{
+    color:#FC6E51;
+  }
+  
+  80%{
+    color:#ED5565;
+  }
+  
+  100%{
+    color:#AC92EC;
+  }
+}
+
+@-webkit-keyframes Color{
+  0%{
+    color:#A0D468;
+  }
+  
+  20%{
+    color:#4FC1E9;
+  }
+  
+  40%{
+    color:#FFCE54;
+  }
+  
+  60%{
+    color:#FC6E51;
+  }
+  
+  80%{
+    color:#ED5565;
+  }
+  
+  100%{
+    color:#AC92EC;
+  }
+}
+
+.bg {
+  background-image: url(https://live.staticflickr.com/561/18955651264_c418a34e37_b.jpg);
+  background-attachment: fixed;
+  background-blend-mode: screen;
+  background-size: cover;
+}
+
+.nothing {
+  opacity: 0;
+}
+
+.nothing:hover{
+  opacity:1;
+  transition: 2s;
+}
+
+  </style>
+<div >
+<marquee>Made by <a id='trythis' href='https://github.com/KingJudgeChong'>David</a> sheesh!</marquee>
+</div>
+
+<img src='https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/86abb766-4717-427e-99d7-3e0d97d15f1b/dapulvt-a43753e0-17db-4b20-9302-f819c6ea3faf.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzg2YWJiNzY2LTQ3MTctNDI3ZS05OWQ3LTNlMGQ5N2QxNWYxYlwvZGFwdWx2dC1hNDM3NTNlMC0xN2RiLTRiMjAtOTMwMi1mODE5YzZlYTNmYWYuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.LwYmqfQxGw5g-KDDk96g8AOILmbIqSy2FaEHuB-UmBQ' alt=''>
+<!-- Don't use Marquee element according to google -->
+
+</div>
+</div>
