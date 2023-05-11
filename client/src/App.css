@@ -37,12 +37,7 @@
   }
 }
 
-#filthis{
-  background-color: rgba(255, 255, 255, 0.4);
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  /* box-shadow: 0px 0px 8px 4px rgba(121,45,195,0.7); */
-}
+
 
 #password1{
   background-color: rgba(0, 0, 0, 0);
@@ -67,10 +62,29 @@
   color: #FFC24D;
 }
 
-#ybut{
+#yelbut{
   background-color: #FFB72E;
   color: #FFFFFF;
 }
-#remember{
+#rememberme{
   background-color: rgba(0,0,0, 0);
+}
+
+.absolute button {
+  width: 8px;
+  height: 8px;
+}
+
+
+
+
+#filthis{
+  background-color: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  z-index: 99;
+  border-radius: 30px;
+  margin-top: -35px;
+  height: 100vh;
+  /* box-shadow: 0px 0px 8px 4px rgba(121,45,195,0.7); */
 }

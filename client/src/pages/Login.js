@@ -138,7 +138,7 @@ const Login = () => {
             />
           </div>
           <div className="flex items-center gap-2 mb-2 mt-2 -ml-10">
-            <Checkbox id="remember" />
+            <Checkbox id="rememberme" />
             <Label
               className="text-zinc-300 me-20 text-xs font-gsr mt-2"
               htmlFor="remember"

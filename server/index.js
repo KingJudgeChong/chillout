@@ -128,7 +128,7 @@ app.get('/posts', (request, response) => {
     INNER JOIN  categories c
     ON          ct.category_id = c.id
     LEFT JOIN   users u
-    ON          p.user_id = u.id
+    ON          p.user_id = u.user_id
     WHERE       p.start_at >= NOW()
     ORDER BY    p.start_at ASC;`, [], (error, results) =>{
         response.json(results.rows)
