@@ -1,16 +1,11 @@
 import React from 'react'
 import Category from './Filters/Category'
 import Type from './Filters/Type'
-import Location from './Filters/Location'
-import FindPost from './Filters/FindPost'
-
 const Filters = () => {
   return (
-    <div className="bg-transparent flex text-sm mt-32 mb-3 max-w-4xl">
+    <div id='filters' className="bg-transparent flex text-sm mt-5 mb-3">
         <Category/>
         <Type/>
-        <Location/>
-        <FindPost/>
     </div>
 
     // <form className="bg-transparent flex text-sm mt-32 mb-3 max-w-4xl" class="filters normal" action="/filter"> 

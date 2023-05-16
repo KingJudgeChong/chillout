@@ -1,8 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
+import myimage from "../pages/images/logo/logo.png"
 const CreateAccount = () => {
+  const navigate = useNavigate();
   const [showModal, setShowModal] = React.useState(false);
 
   const [username, setUsername] = useState("");
@@ -24,7 +26,9 @@ const CreateAccount = () => {
         contactNo: contactNo,
       })
       .then(function (response) {
-        console.log(response);
+        console.log(response.data);
+        localStorage.setItem('jwt', response.data.token)
+        navigate("/home")
       })
       .catch(function (error) {
         console.log(error);
@@ -76,7 +80,7 @@ const CreateAccount = () => {
                 <div className="flex items-start justify-between p-5 w-4/5 max-w-4xl">
                   <img
                     className="w-52"
-                    src="https://cdn.discordapp.com/attachments/818821918303715350/1105451216223354910/logo.png"
+                    src={myimage}
                     alt=""
                   />
                 </div>

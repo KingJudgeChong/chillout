@@ -3,7 +3,7 @@ import { Label, TextInput, Checkbox } from "flowbite-react";
 import CreateAccount from "./CreateAccount";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import myimage from "../pages/images/logo/logo.png"
 const Login = () => {
   const navigate = useNavigate();
   // const [username, setUsername] = useState('')
@@ -27,6 +27,7 @@ const Login = () => {
   //   }
   // }
 
+
   const loginPage = (event) => {
     event.preventDefault();
 
@@ -39,7 +40,8 @@ const Login = () => {
       })
       .then(function (response) {
         console.log(response);
-        navigate("/");
+        localStorage.setItem('jwt', response.data.token)
+        navigate("/home");
       })
       .catch(function (error) {
         console.log(error);
@@ -90,7 +92,7 @@ const Login = () => {
       </div>
       <div className="absolute top-32 right-64 w-80 ...">
         <img
-          src="https://cdn.discordapp.com/attachments/818821918303715350/1105451216223354910/logo.png"
+          src={myimage}
           alt=""
         />
       </div>
@@ -136,6 +138,7 @@ const Login = () => {
               onChange={handleChangePassword}
               required={true}
             />
+            
           </div>
           <div className="flex items-center gap-2 mb-2 mt-2 -ml-10">
             <Checkbox id="rememberme" />
@@ -156,7 +159,7 @@ const Login = () => {
 
           <button
             onClick={loginPage}
-            id="ybut"
+            id="loginbutton"
             className="flex text-zinc-300 justify-center rounded w-32 h-10 ml-14 pt-3 font-gsr font-bold text-base"
             type="submit"
             href="/home"

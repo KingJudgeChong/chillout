@@ -8,6 +8,11 @@
   src: url("C:\Users\kingj\OneDrive\Desktop\capstone project\chillout\client\public\grantha-sangam-mn-regular-maisfontes.866d\grantha-sangam-mn-regular.otf");
 }
 
+@font-face {
+  font-family: "DIN Condensed";
+  src: url("C:\Users\kingj\OneDrive\Desktop\capstone project\chillout\client\public\DIN-Condensed-Bold.ttf");
+}
+
 
 
 body {

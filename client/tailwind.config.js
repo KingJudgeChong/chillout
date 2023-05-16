@@ -11,7 +11,7 @@ module.exports = {
       },
       fontFamily: {
         gsr: ["Grantha Sangam MN", "Regular"],
-        gsb: ["Grantha Sangam MN", "Bold"],
+        dcb: ["DIN Condensed", "Bold"],
       },
       backgroundOpacity: {
         '10': '0.1',

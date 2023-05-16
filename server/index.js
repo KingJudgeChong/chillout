@@ -1,5 +1,9 @@
 require('dotenv').config()
 
+const auth = require('./middleware/auth')
+const { generateToken } = require('./generateToken.js')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 const express = require('express')
 const cors = require('cors')
 const app = express()
@@ -27,51 +31,39 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
-// get, put, post, delete
-// app.get('/', (request, response) => {
-//     // response.send()
-//     response.json("Hello World")
-// })
-
-// app.get('/all-users', (request, response) => {
-//     pool.query('SELECT * FROM users', (error, results) => {
-//         if (error) {
-//             throw error;
-//         }
-//         response.status(200).json(results.rows)
-//     })
-// })
-
-// app.get('/all-userss', (request, response) => {
-//     pool.query('SELECT * FROM users', (error, results) => {
-//         if (error) {
-//             throw error;
-//         }
-//         response.status(200).json(results.rows)
-//     })
-// })
-
-// app.get('/get-user/:id', (request, response) => {
-//     const id = request.params.id
-
-//     pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
-//         if (error) {
-//             throw error;
-//         }
-//         response.status(200).json(results.rows)
-//     })
-// })
-
-//post
-app.post('/add-user', (request, response) => {
-    const { username, email, password } = request.body
-
-    pool.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)', [username, email, password], (error, results) => {
+app.post('/add-user', async (request, response) => {
+    const { username, email, firstName, lastName, contactNo, password } = request.body
+    const encryptedPassword =  await bcrypt.hash(password, 10)
+    pool.query('INSERT INTO users (username, email, first_name, last_name, contact_no, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id, email', [username, email, firstName, lastName, contactNo, encryptedPassword], (error, results) => {
         if (error) {
             throw error;
         }
-        response.status(201).send('User added')
+        const user = results.rows[0]
+        const token = jwt.sign(
+            { user_id: user.user_id, email: user.email },
+            process.env.TOKEN_KEY,
+            {
+              expiresIn: "2h",
+            }
+          );
+          user.token = token
+        response.status(201).send(user)
     })
+})
+
+app.post('/verify', (request, response) => {
+    const token = request.body.token
+    try {
+        const decoded = jwt.verify(token, process.env.TOKEN_KEY)
+        console.log(decoded)
+        
+        response.status(200).send('verified')
+    }
+    catch (error){
+        console.log('jwt invalid')
+        response.status(401).send('not verified')
+    }
+
 })
 
 app.post('/auth', (request, response) => {
@@ -79,19 +71,24 @@ app.post('/auth', (request, response) => {
     console.log(request.body)
     const usernameOrEmail = request.body.usernameOrEmail
     const password = request.body.password
-
-    pool.query("SELECT password FROM users WHERE username = $1 OR email = $1", [usernameOrEmail], (error, results) => {
+    
+    
+    pool.query("SELECT user_id, email, password FROM users WHERE username = $1 OR email = $1", [usernameOrEmail], async (error, results) => {
         if (error) {
             throw error;
             
         }
         if (results.rows.length == 0) {
-            response.status(401).send(`Can't find username!`)
             console.log('No username')
+            return response.status(401).send(`Can't find username!`)
         }
-        
-        else if (password === results.rows[0].password){
-            response.status(200).send('User authenticated correct password provided')
+        const { user_id, email } = results.rows[0]
+        const user = { user_id, email } 
+        const userPassword = results.rows[0].password
+        const isValidPassword = await bcrypt.compare(password, userPassword)  
+        if (isValidPassword){
+            const token = generateToken(user)
+            return response.status(200).send({token, ...user})
             
         }
         else {
@@ -101,17 +98,21 @@ app.post('/auth', (request, response) => {
     })   
 })
 
-
+app.use(auth)
 app.post('/posts', (request, response) => {
-
     const { section, description, datetime, venue, created_at } = request.body
-
-    pool.query("INSERT INTO posts (category_type_id, description, start_at, venue, created_at) VALUES ($1, $2, $3, $4, $5)", [section, description, datetime, venue, created_at], (error, results) => {
-        if (error) {
-            throw error;
-        }
-        response.status(201).send('Post added!')
-    })
+    try {
+        pool.query("INSERT INTO posts (category_type_id, description, start_at, venue, created_at, user_id) VALUES ($1, $2, $3, $4, $5, $6)", [section, description, datetime, venue, created_at, request.user.user_id], (error, results) => {
+            if (error) {
+                throw error;
+            }
+            response.status(201).send('Post added!')
+        })
+    }
+    catch (error){
+        console.log('jwt invalid')
+        response.status(401).send('not verified')
+    }
 })
 
 

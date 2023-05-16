@@ -1,15 +1,23 @@
 import React from 'react'
-import CreatePost from './CreatePost'
- const Navbar = () => {
+import axios from 'axios'
+const Navbar = () => {
+
   return (
-    <div className="text-zinc-300 absolute border-inherit top-0 w-full shadow-lg h-16 grid grid-rows-4 gap-4 place-content-end ">
+    <div id='bgnavbar' className="font-gsr absolute w-auto h-16 flex">
+        <div>Home</div>
         
-        <div><span><CreatePost/></span></div>
-        <div className="mr-7 mt-2">
+        <div>About</div>
+        <div>Contact me</div>
+        <div className="mr-7 mt-2 flex">
+          <div>
         <img
             src="https://img.icons8.com/color/256/gender-neutral-user.png"
             className="rounded-full shadow-lg w-12 bg-slate-300"
             alt="Avatar" />
+          </div>
+            <div>
+            <p>name</p>
+            </div>
                     
         </div>       
       </div>
