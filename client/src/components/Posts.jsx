@@ -24,7 +24,7 @@ const Posts = () => {
   return (
     <div id="filthis">
       <div id="marginpost" className="flex flex-col">
-        <div id='insidepost' className="flex">
+        <div id="insidepost" className="flex">
           <div id="chilloutareas" className="text-black font-dcb font-bold">
             Chillout<span id="darkyellow">Areas</span>
           </div>
@@ -33,14 +33,17 @@ const Posts = () => {
             <CreatePost />
           </div>
         </div>
-        <div id='post2' className="font-gsr mt-9 ml-2">
-          Showing ongoing chillouts around{" "}
-          <span id="darkyellow" className="font-bold"> San Fernando, La Union</span>
+        <div id="locationpost" className="font-gsr mt-9 ml-2">
+          Showing ongoing chillouts around
+          <span id="darkyellow" className="font-bold">
+            {" "}
+            San Fernando, La Union
+          </span>
         </div>
         <div className="">
           <Filters />
         </div>
-        <div id='allposts' className="grid grid-cols-2">
+        <div id="allposts" className="grid grid-cols-2">
           {posts.length === 0 ? (
             <div className="text-8xl text-center">
               BOOM!
@@ -54,29 +57,48 @@ const Posts = () => {
             posts.map((post) => {
               return (
                 <div
-                  id='user_post'
+                  id="user_post"
                   className=" bg-white shadow-lg rounded"
                   key={post.post_id}
                 >
-                  <div id="imagepost">
+                  <div id="imagepost" className="font-gsr">
                     <img
                       className="w-100 w-full h-full rounded"
                       alt=""
                       src={post.photo_img}
                     />
+                    
+                    <div id="lowerleft" className="tracking-wide">
+                      <div>
+                        <img 
+                          className="w-12 border-2 h-11 rounded-full"
+                          src="img/three-happy-tennis-players-make-selfie.png"
+                          alt=''
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <div>
+                          Posted by <span className="font-bold">{post.username}</span>
+                        </div>
+                        <div>
+                          12 hours ago
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div
+                      id="upperright"
+                      className="font-gsr font-bold tracking-wider"
+                    >
+                      20 <span>are going</span>
+                    </div>
                   </div>
                   <div className="h-auto">
                     {/* <p>{post.username}</p> */}
-                    <p
-                      id="yellowpost"
-                      className="w-11 font-gsr text-white "
-                    >
+                    <p id="yellowpost" className="w-11 font-gsr text-white ">
                       {post.category}
                     </p>
-                    <p
-                      id="interestpost"
-                      className="font-gsr font-bold"
-                    >
+                    <p id="interestpost" className="font-gsr font-bold">
                       {post.interest}
                       <span> with anyone!</span>
                     </p>
@@ -116,13 +138,11 @@ const Posts = () => {
                       </div>
                       <div className="font-gsr">
                         Group Limit:{" "}
-                        <span className="font-gsr font-bold">
-                          20 people
-                        </span>
+                        <span className="font-gsr font-bold">20 people</span>
                       </div>
                     </div>
                     <div className="text-center border-2 mt-10 text-2xl">
-                      <button >BUTTON</button>
+                      <button>BUTTON</button>
                     </div>
                   </div>
                 </div>

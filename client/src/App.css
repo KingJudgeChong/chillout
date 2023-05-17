@@ -97,7 +97,7 @@
 }
 
 #carouselinfo {
-  font-size: 22px;
+  font-size: 21.7px;
   top: 11rem;
 }
 
@@ -126,7 +126,7 @@
   padding-top: 14px;
 }
 
-#post2 {
+#locationpost {
   font-size: 1.42rem;
   line-height: 2.18rem;
 }
@@ -152,7 +152,7 @@
   margin-top: 19.8px;
   margin-left: 8px;
   margin-right:-2.7px;
-  column-gap: 2.30rem;
+  column-gap: 2.40rem;
   row-gap: 3.9rem;
 }
 
@@ -163,6 +163,33 @@
 
 #imagepost{
   height: 264px;
+  position: relative;
+  color: #FFFFFF;
+}
+
+#lowerleft {
+  display: flex;
+  position: absolute;
+  bottom: 8px;
+  left: 24.3px;
+  font-size: 17px;
+}
+
+#upperright {
+  position: absolute;
+  top: 15.5px;
+  right: 16px;
+  background-color: #92B92A;
+  color: #FFFFFF;
+  text-align: center;
+  border: 2px solid #A0C42E;
+  border-radius: 5px;
+  width: auto;
+  height: auto;
+  padding-right: 15px;
+  padding-top: 11.5px;
+  padding-left: 15.8px;
+  padding-bottom: 1px;
 }
 
 #yellowpost {
