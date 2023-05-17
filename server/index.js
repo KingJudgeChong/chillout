@@ -34,13 +34,13 @@ app.use(bodyParser.urlencoded({
 app.post('/add-user', async (request, response) => {
     const { username, email, firstName, lastName, contactNo, password } = request.body
     const encryptedPassword =  await bcrypt.hash(password, 10)
-    pool.query('INSERT INTO users (username, email, first_name, last_name, contact_no, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id, email', [username, email, firstName, lastName, contactNo, encryptedPassword], (error, results) => {
+    pool.query('INSERT INTO users (username, email, first_name, last_name, contact_no, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id, username, email', [username, email, firstName, lastName, contactNo, encryptedPassword], (error, results) => {
         if (error) {
             throw error;
         }
         const user = results.rows[0]
         const token = jwt.sign(
-            { user_id: user.user_id, email: user.email },
+            { user_id: user.user_id, username: user.username, email: user.email },
             process.env.TOKEN_KEY,
             {
               expiresIn: "2h",
@@ -73,7 +73,7 @@ app.post('/auth', (request, response) => {
     const password = request.body.password
     
     
-    pool.query("SELECT user_id, email, password FROM users WHERE username = $1 OR email = $1", [usernameOrEmail], async (error, results) => {
+    pool.query("SELECT user_id, username, email, password FROM users WHERE username = $1 OR email = $1", [usernameOrEmail], async (error, results) => {
         if (error) {
             throw error;
             
@@ -82,8 +82,8 @@ app.post('/auth', (request, response) => {
             console.log('No username')
             return response.status(401).send(`Can't find username!`)
         }
-        const { user_id, email } = results.rows[0]
-        const user = { user_id, email } 
+        const { user_id, username, email  } = results.rows[0]
+        const user = { user_id, username, email } 
         const userPassword = results.rows[0].password
         const isValidPassword = await bcrypt.compare(password, userPassword)  
         if (isValidPassword){

@@ -1,27 +1,28 @@
-import React from 'react'
-import axios from 'axios'
+import React from "react";
+
 const Navbar = () => {
+  const username = localStorage.getItem("username");
 
   return (
-    <div id='bgnavbar' className="font-gsr absolute w-auto h-16 flex">
-        <div>Home</div>
-        
-        <div>About</div>
-        <div>Contact me</div>
-        <div className="mr-7 mt-2 flex">
-          <div>
-        <img
-            src="https://img.icons8.com/color/256/gender-neutral-user.png"
-            className="rounded-full shadow-lg w-12 bg-slate-300"
-            alt="Avatar" />
-          </div>
-            <div>
-            <p>name</p>
-            </div>
-                    
-        </div>       
-      </div>
-  )
-}
+    <div id="bgnavbar" className="font-gsr absolute w-auto h-16 flex">
+      <div>Home</div>
 
-export default Navbar
+      <div>About</div>
+      <div>Contact me</div>
+      <div id='profilenavbar' className="mr-7 mt-2 flex">
+        <div className="h-auto">
+          <img
+            id='imagenavbar'
+            src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
+            alt="Avatar"
+          />
+        </div>
+        <div id='usernamenavbar'>
+          <p>{username}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Navbar;

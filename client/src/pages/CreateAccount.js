@@ -5,35 +5,42 @@ import { useNavigate } from "react-router-dom";
 import myimage from "../pages/images/logo/logo.png"
 const CreateAccount = () => {
   const navigate = useNavigate();
-  const [showModal, setShowModal] = React.useState(false);
 
+  const [showModal, setShowModal] = React.useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [contactNo, setContactNo] = useState("");
   const [password, setPassword] = useState("");
-
+  const [isValidEmail, setIsValidEmail] = useState(false);
+  const [invalidEmail, setInvalidEmail] = useState("")
+  
   const createAccount = (event) => {
     event.preventDefault();
-    axios
-      .post("http://localhost:8000/add-user", {
-        username: username,
-        email: email,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        contactNo: contactNo,
-      })
-      .then(function (response) {
-        console.log(response.data);
-        localStorage.setItem('jwt', response.data.token)
-        navigate("/home")
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    setShowModal(false);
+    if (username !== '' && email !== '' && firstName !== '' && lastName !== '' && contactNo !== '' && password !== '') {
+      axios
+        .post("http://localhost:8000/add-user", {
+          username: username,
+          email: email,
+          password: password,
+          firstName: firstName,
+          lastName: lastName,
+          contactNo: contactNo,
+        })
+        .then(function (response) {
+          console.log(response.data);
+          localStorage.setItem('jwt', response.data.token)
+          localStorage.setItem('username', response.data.username)
+          localStorage.setItem('user_id', response.data.user_id)
+          navigate("/home")
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }else {
+        alert('Fill up all the details!')
+    }
   };
 
   const handleChangeUsername = (event) => {
@@ -41,7 +48,15 @@ const CreateAccount = () => {
   };
 
   const handleChangeEmail = (event) => {
-    setEmail(event.target.value);
+    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+
+    if (regex.test(event.target.value)) {
+      setIsValidEmail(true);
+      setEmail(event.target.value) 
+    }else {
+      setInvalidEmail('Invalid email!')
+      setIsValidEmail(false)
+    }
   };
 
   const handleChangePassword = (event) => {
@@ -70,7 +85,7 @@ const CreateAccount = () => {
         Create Account
       </button>
       {showModal ? (
-        <>
+        <form onSubmit={createAccount}>
           <div className="fixed inset-0 z-40 bg-bglogin bg-cover"></div>
           <div className="justify-end items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none mr-52 ml-3">
             <div className="relative w-2/5 h-4/5 max-w-3xl">
@@ -102,23 +117,27 @@ const CreateAccount = () => {
                       className="w-80"
                       id="email1"
                       type="text"
-                      placeholder="Enter username"
+                      minlength="2"
+                      maxlength="30"
+                      placeholder="Username"
                       onChange={handleChangeUsername}
                       required={true}
                     />
                   </div>
                   <div>
                     <div className="mb-2 block">
-                      <label htmlFor="email1" value="Email/Username" />
+                      <label htmlFor="email1" value="Email/Username"/>
                     </div>
+                    
                     <input
                       className="w-80 border-x-0 border-t-0"
                       id="email1"
                       type="email"
-                      placeholder="Enter email"
+                      placeholder="Email"
                       onChange={handleChangeEmail}
                       required={true}
-                    />
+                      />
+                    {!isValidEmail ? <div>{invalidEmail}</div> : null}
                   </div>
                   <div>
                     <div className="mb-2 block">
@@ -128,7 +147,7 @@ const CreateAccount = () => {
                       className="w-80"
                       id="email1"
                       type="text"
-                      placeholder="Enter first name"
+                      placeholder="First name"
                       onChange={handleChangeFirstName}
                       required={true}
                     />
@@ -141,23 +160,26 @@ const CreateAccount = () => {
                       className="w-80 border-x-0 border-t-0"
                       id="email1"
                       type="text"
-                      placeholder="Enter last name"
+                      placeholder="Last name"
                       onChange={handleChangeLastName}
                       required={true}
                     />
                   </div>
                   <div>
                     <div className="mt-4 mb-2 block">
-                      <label htmlFor="contactNo" value="Contact Number" />
-                    </div>
+                      <label htmlFor="contactNo" value="Contact Number"/>
                     <input
                       className="w-80 border-x-0 border-t-0"
-                      id="email1"
-                      type="text"
-                      placeholder="Enter contact number"
+                      id="contact1"
+                      type="tel"
+                      minlength="11"
+                      maxlength="13"
+                      placeholder="Mobile Number"
+                      pattern="[09]{2}[0-9]{9}|[+639]{4}[0-9]{9}"
                       onChange={handleChangeContactNo}
                       required={true}
-                    />
+                      />
+                      </div>
                   </div>
                   <div>
                     <div className="mt-4 mb-2 block">
@@ -167,7 +189,7 @@ const CreateAccount = () => {
                       className="w-80 border-x-0 border-t-0"
                       id="password1"
                       type="password"
-                      placeholder="Enter password"
+                      placeholder="Password"
                       onChange={handleChangePassword}
                       required={true}
                     />
@@ -184,8 +206,7 @@ const CreateAccount = () => {
                   </button>
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={createAccount}
+                    type="submit"
                   >
                     Sign Up
                   </button>
@@ -193,7 +214,7 @@ const CreateAccount = () => {
               </div>
             </div>
           </div>
-        </>
+        </form>
       ) : null}
     </>
   );

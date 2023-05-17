@@ -41,6 +41,8 @@ const Login = () => {
       .then(function (response) {
         console.log(response);
         localStorage.setItem('jwt', response.data.token)
+        localStorage.setItem('username', response.data.username)
+        localStorage.setItem('user_id', response.data.user_id)
         navigate("/home");
       })
       .catch(function (error) {
@@ -166,11 +168,11 @@ const Login = () => {
           >
             Log in
           </button>
-          <span className="text-center text-zinc-300 text-xs font-gsr font-bold -ml-8 mt-4">
-            Don't have an account? <CreateAccount />{" "}
-          </span>
         </form>
       </div>
+          <div className="absolute bottom-24 right-96 text-center text-zinc-300 text-xs font-gsr font-bold -ml-8 mt-4">
+            Don't have an account? <CreateAccount />{" "}
+          </div>
     </div>
   );
 };

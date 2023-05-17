@@ -72,7 +72,7 @@ const Posts = () => {
                       <div>
                         <img 
                           className="w-12 border-2 h-11 rounded-full"
-                          src="img/three-happy-tennis-players-make-selfie.png"
+                          src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
                           alt=''
                         />
                       </div>
@@ -115,7 +115,7 @@ const Posts = () => {
                           {" "}
                           {format(
                             new Date(post.start_at),
-                            "MMM dd - hh:mm aaa"
+                            "MMM dd - hh:mm a"
                           )}
                         </span>
                       </div>

@@ -55,6 +55,14 @@
   border-right: none;
 }
 
+#contact1{
+  background-color: rgba(0, 0, 0, 0);
+  color: #FAFAFA;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
 #customimg {
   width: 100vw;
 }
@@ -72,10 +80,37 @@
 #bgnavbar {
   color: #DBDBDB;
   column-gap: 4rem;
-  font-size: 1.17rem;
-  top: 3rem;
-  right: 3rem;
+  font-size: 1.18rem;
+  top: 2.35rem;
+  right: 3.52rem;
 
+}
+
+#profilenavbar {
+  position: relative;
+  background: #FFFFFF48 0% 0% no-repeat padding-box;
+  border-radius: 100px;
+  margin-top: -13px;
+  height: 52px;
+  width: auto;
+}
+
+#imagenavbar {
+  border-radius: 100px;
+  height: 51px;
+  width: 48px;
+  padding-left: 3.5px;
+  padding-top: 3.5px;
+  padding-bottom: 3.5px;
+}
+
+#usernamenavbar {
+  margin-top: 20px;
+  color: #FFFFFF;
+  font-size: 15.5px;
+  padding-right: 10px;
+  padding-left: 6px;
+  width: auto;
 }
 
 #marginpost {
@@ -278,7 +313,7 @@
   z-index: 99;
   border-radius: 40px;
   margin-top: -56.5px;
-  height: 100vh;
+  height: auto;
   /* box-shadow: 0px 0px 8px 4px rgba(121,45,195,0.7); */
 }
 
