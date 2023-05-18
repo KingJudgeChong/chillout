@@ -61,7 +61,7 @@ const Carousel = () => {
             src="https://www.wallart.com/media/catalog/product/cache/296967dd00486cb8867f6b6fbb192224/w/0/w03204-small.jpg"
             alt="..."
             id='customimg'
-            className="absolute top-1/2 left-1/2 block -translate-x-1/2 h-auto"
+            className="absolute top-1/2 left-1/2 block -translate-x-1/2 -translate-y-1/2 h-auto object-fit-contain brightness-75 rounded-lg"
           />
         </div>
       </div>

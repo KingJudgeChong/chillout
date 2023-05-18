@@ -1,6 +1,6 @@
 import React from 'react'
 import Category from './Filters/Category'
-import Type from './Filters/Type'
+import Type from './Filters/Interest'
 const Filters = () => {
   return (
     <div id='filters' className="bg-transparent flex text-sm mt-5 mb-3">

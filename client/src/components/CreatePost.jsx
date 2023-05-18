@@ -178,7 +178,7 @@ const CreatePost = () => {
                   <div>
                     <div className="mb-2 block">
                       <label htmlFor="started_at" value="started_at">
-                        dawda
+                
                       </label>
                     </div>
                     <input

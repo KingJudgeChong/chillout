@@ -77,6 +77,10 @@
   color: #FFFFFF;
 }
 
+#createaccount {
+  background-color: #FFB72E;
+}
+
 #bgnavbar {
   color: #DBDBDB;
   column-gap: 4rem;
@@ -95,6 +99,10 @@
   width: auto;
 }
 
+#profilenavbar:hover, #profilenavbar:focus {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
 #imagenavbar {
   border-radius: 100px;
   height: 51px;
@@ -105,12 +113,18 @@
 }
 
 #usernamenavbar {
+  display: flex;
   margin-top: 20px;
   color: #FFFFFF;
   font-size: 15.5px;
   padding-right: 10px;
   padding-left: 6px;
   width: auto;
+}
+
+#arrownavbar {
+  font-size: 12px;
+  color: #FFFFFF;
 }
 
 #marginpost {

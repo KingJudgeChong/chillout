@@ -1,5 +1,5 @@
 import React from "react";
-
+import { HiChevronDown } from "react-icons/hi"
 const Navbar = () => {
   const username = localStorage.getItem("username");
 
@@ -19,6 +19,7 @@ const Navbar = () => {
         </div>
         <div id='usernamenavbar'>
           <p>{username}</p>
+          <HiChevronDown/>
         </div>
       </div>
     </div>

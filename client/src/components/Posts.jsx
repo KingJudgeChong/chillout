@@ -6,20 +6,28 @@ import Filters from "./Filters";
 import CreatePost from "./CreatePost";
 import { BsCalendar3 } from "react-icons/bs";
 import { MdLocationOn, MdGroups } from "react-icons/md";
-
+import { useSearchParams } from "react-router-dom";
 const Posts = () => {
+  const [searchParams] = useSearchParams()
+  const categoryId = searchParams.get('categoryId')
+  const categoryTypeId = searchParams.get('categoryTypeId')
   const [posts, setPosts] = useState([]);
+  
 
   useEffect(() => {
+    const url = new URL('http://localhost:8000');
+    url.pathname = '/posts';
+    Number(categoryId) && url.searchParams.append('categoryId', categoryId);
+    Number(categoryTypeId) && url.searchParams.append('categoryTypeId', categoryTypeId);
     axios
-      .get("http://localhost:8000/posts", {
+      .get(url, {
         headers: { Authorization: localStorage.getItem("jwt") },
       })
       .then((response) => {
         console.log(response.data, "strings");
         setPosts(response.data);
       });
-  }, []);
+  }, [categoryId, categoryTypeId]);
 
   return (
     <div id="filthis">
