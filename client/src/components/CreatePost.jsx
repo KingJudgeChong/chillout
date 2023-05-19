@@ -11,8 +11,8 @@ const CreatePost = () => {
   const [datetime, setDateTime] = useState("");
   const [section, setSection] = useState("");
   const [venue, setVenue] = useState("");
+  const [maxUsers, setMaxUsers] = useState("")
 
-  const d = new Date();
 
   const createPost = (event) => {
     event.preventDefault();
@@ -24,7 +24,7 @@ const CreatePost = () => {
           description: description,
           datetime: datetime,
           venue: venue,
-          created_at: d,
+          max_users: maxUsers,
         },
         {
           headers: {
@@ -55,6 +55,10 @@ const CreatePost = () => {
 
   const handleChangeVenue = (event) => {
     setVenue(event.target.value);
+  };
+
+  const handleChangeMaxUsers = (event) => {
+    setMaxUsers(event.target.value);
   };
 
   useEffect(() => {
@@ -88,7 +92,7 @@ const CreatePost = () => {
         { headers: { Authorization: localStorage.getItem("jwt") } }
       )
       .then((response) => {
-        console.log("this one");
+        console.log("CreatePost");
         console.log(response.data);
         setSectionList(response.data);
         setSection(response.data[0].id);
@@ -110,7 +114,7 @@ const CreatePost = () => {
         </div>
       </button>
       {showModal ? (
-        <>
+        <form onSubmit={createPost}>
           <div className="opacity-75 fixed inset-0 z-40 bg-black"></div>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-2/5 h-4/5 max-w-3xl">
@@ -123,9 +127,7 @@ const CreatePost = () => {
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
                   <div>
-                    <div className="mb-2 block">
-                      <label htmlFor="category" value="category" />
-                    </div>
+                    
                     <select
                       className="w-80 border-x-0 border-t-0"
                       id="category"
@@ -143,9 +145,7 @@ const CreatePost = () => {
                   </div>
 
                   <div>
-                    <div className="mb-2 block">
-                      <label htmlFor="section" value="section" />
-                    </div>
+                    
                     <select
                       className="w-80 border-x-0 border-t-0"
                       id="section"
@@ -162,45 +162,50 @@ const CreatePost = () => {
                     </select>
                   </div>
 
-                  <div>
-                    <div className="mb-2 block">
-                      <label htmlFor="description" value="Post message" />
-                    </div>
-                    <input
-                      className="w-80 border-x-0 border-t-0"
+                  <div>                   
+                    <textarea
+                      className="w-96 border-x-0 border-t-0"
                       id="description"
-                      type="text"
-                      placeholder="post message"
+                      type="textarea"
+                      rows="3"
+                      maxlength="50"
+                      placeholder="Post message"
                       onChange={handleChangeDescription}
                       required={true}
                     />
                   </div>
                   <div>
-                    <div className="mb-2 block">
-                      <label htmlFor="started_at" value="started_at">
-                
-                      </label>
-                    </div>
                     <input
-                      className="w-80 border-x-0 border-t-0"
+                      className="w-80 border-x-0 border-t-0 text-lg"
                       id="started_at"
                       type="datetime-local"
-                      placeholder="datetime"
                       onChange={handleChangeDateTime}
                       required={true}
-                    />
+                    />--open me!
                   </div>
 
                   <div>
-                    <div className="mb-2 block">
-                      <label htmlFor="venue" value="venue" />
-                    </div>
+                    
                     <input
                       className="w-80 border-x-0 border-t-0"
                       id="venue"
                       type="text"
                       placeholder="Venue"
                       onChange={handleChangeVenue}
+                      required={true}
+                    />
+                  </div>
+                  <div>
+                    
+                    <input
+                      className="w-80 border-x-0 border-t-0"
+                      id="venue"
+                      type="text"
+                      pattern="[1-99]+"
+                      minlength='1'
+                      maxlength='2'
+                      placeholder="Group Limit: 1-99"
+                      onChange={handleChangeMaxUsers}
                       required={true}
                     />
                   </div>
@@ -216,16 +221,15 @@ const CreatePost = () => {
                   </button>
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={createPost}
+                    type="submit"
                   >
-                    Post!
+                    Post 
                   </button>
                 </div>
               </div>
             </div>
           </div>
-        </>
+        </form>
       ) : null}
     </>
   );

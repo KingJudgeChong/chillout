@@ -19,7 +19,7 @@ function App() {
         token: localStorage.getItem("jwt"),
       })
       .then((response) => {
-        console.log(response.data);
+        console.log('VERIFIED');
         navigate('/home')
       })
       .catch(() => {

@@ -31,7 +31,7 @@ const Category = () => {
         { headers: { Authorization: localStorage.getItem("jwt") } }
       )
       .then((response) => {
-        console.log("this one");
+        console.log("CATEGORY POST");
         console.log(response.data);
 
       });
@@ -41,7 +41,7 @@ const Category = () => {
     <div id="filterborders" className="font-gsr mr-3 tracking-wide flex">
       Category:
       <div className="font-bold ml-1">
-        <select value={categoryId ?? 0}
+        <select id='custom-select' value={categoryId ?? 0}
           onChange={handleCategoryChange}
           required={true}>
           <option value='0'>Show all</option>

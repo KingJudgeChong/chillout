@@ -39,6 +39,7 @@ const Login = () => {
         password: password,
       })
       .then(function (response) {
+        console.log("LOGIN")
         console.log(response);
         localStorage.setItem('jwt', response.data.token)
         localStorage.setItem('username', response.data.username)

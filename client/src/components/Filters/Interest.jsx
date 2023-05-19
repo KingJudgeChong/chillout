@@ -44,7 +44,7 @@ const Type = () => {
     <div id='filterborders' className='font-gsr mr-3 tracking-wide flex'>
         Interest: 
         <div className="font-bold ml-1">
-        <select value={categoryTypeId ?? 0}
+        <select id='custom-select2' value={categoryTypeId ?? 0} 
           onChange={handleSectionChange}
           required={true}>
           <option value='0'>Show all</option>

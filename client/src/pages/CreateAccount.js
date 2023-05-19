@@ -13,8 +13,6 @@ const CreateAccount = () => {
   const [lastName, setLastName] = useState("");
   const [contactNo, setContactNo] = useState("");
   const [password, setPassword] = useState("");
-  const [isValidEmail, setIsValidEmail] = useState(false);
-  const [invalidEmail, setInvalidEmail] = useState("")
   
   const createAccount = (event) => {
     event.preventDefault();
@@ -48,16 +46,8 @@ const CreateAccount = () => {
   };
 
   const handleChangeEmail = (event) => {
-    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
-
-    if (regex.test(event.target.value)) {
-      setIsValidEmail(true);
-      setEmail(event.target.value) 
-    }else {
-      setInvalidEmail('Invalid email!')
-      setIsValidEmail(false)
-    }
-  };
+    setEmail(event.target.value) 
+  }
 
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
@@ -120,6 +110,7 @@ const CreateAccount = () => {
                       minlength="2"
                       maxlength="30"
                       placeholder="Username"
+                      pattern="[A-Za-z0-9]+"
                       onChange={handleChangeUsername}
                       required={true}
                     />
@@ -134,10 +125,10 @@ const CreateAccount = () => {
                       id="email1"
                       type="email"
                       placeholder="Email"
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                       onChange={handleChangeEmail}
                       required={true}
                       />
-                    {!isValidEmail ? <div>{invalidEmail}</div> : null}
                   </div>
                   <div>
                     <div className="mb-2 block">
@@ -147,7 +138,8 @@ const CreateAccount = () => {
                       className="w-80"
                       id="email1"
                       type="text"
-                      placeholder="First name"
+                      pattern="[A-Za-z\s]+"
+                      placeholder="First Name"
                       onChange={handleChangeFirstName}
                       required={true}
                     />
@@ -160,7 +152,8 @@ const CreateAccount = () => {
                       className="w-80 border-x-0 border-t-0"
                       id="email1"
                       type="text"
-                      placeholder="Last name"
+                      pattern="[A-Z]{1}[a-z]{1,}"
+                      placeholder="Last Name"
                       onChange={handleChangeLastName}
                       required={true}
                     />
@@ -190,13 +183,14 @@ const CreateAccount = () => {
                       id="password1"
                       type="password"
                       placeholder="Password"
+                      minlength="5"
                       onChange={handleChangePassword}
                       required={true}
                     />
                   </div>
                 </div>
                 {/*footer*/}
-                <div className="items-center p-6 border-t border-solid border-slate-200">
+                <div className="items-center p-6 border-t border-solid border-slate-200 flex justify-around">
                   <div id='createaaccount'>
                   <button
                     type="submit"
@@ -204,10 +198,10 @@ const CreateAccount = () => {
                     Create Account
                   </button>
                   </div>
-                  <div>
+                  <div className="mt-5">
                     Already have an account?
                   <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="text-yellow-300 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                     onClick={() => setShowModal(false)}
                   >

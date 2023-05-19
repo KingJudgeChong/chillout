@@ -122,9 +122,8 @@
   width: auto;
 }
 
-#arrownavbar {
-  font-size: 12px;
-  color: #FFFFFF;
+#dropdownnavbar {
+  background: #FFFFFF48 0% 0% no-repeat padding-box;
 }
 
 #marginpost {
@@ -175,6 +174,8 @@
   padding-top: 14px;
 }
 
+
+
 #locationpost {
   font-size: 1.42rem;
   line-height: 2.18rem;
@@ -184,9 +185,10 @@
   margin-left: 9px;
 }
 #filterborders {
-  border-color: #EBA51D;
+  position: relative;
+  border-left-color: #EBA51D;
+  border-left: 1.5px solid;
   color: #EBA51D;
-  border-width: 1.5px;
   width: 200px;
   border-radius: 5px;
   margin-top: 2px;
@@ -195,6 +197,46 @@
   padding-top: 19px;
   padding-left: 8.5px;
   padding-bottom: 26px;
+}
+
+#custom-select {
+  background-color: transparent;
+  border: none;
+  padding-top: 1rem;
+  margin-left: -0.5rem;
+  margin-top: -1.5rem;
+  height: 44.5px;
+  padding-left: -100px;
+}
+
+#custom-select:focus {
+  border-color: #EBA51D;
+  border: 2.5px solid;
+  border-radius: 5px;
+  padding-left: 97px;
+  margin-right: 12px;
+  width: auto;
+  margin-left: -95px;
+}
+
+#custom-select2 {
+  background-color: transparent;
+  border: none;
+  padding-top: 1rem;
+  margin-left: -0.5rem;
+  margin-top: -1.5rem;
+  height: 44.5px;
+  padding-left: -100px;
+}
+
+#custom-select2:focus {
+  border-color: #EBA51D;
+  border: 2.5px solid;
+  border-radius: 5px;
+  padding-left: 85px;
+  margin-right: 12px;
+  width: auto;
+  margin-left: -83px;
 }
 
 #allposts {
@@ -266,6 +308,8 @@
   margin-top: 10px;
   color: #6F6F6F;
   font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #post {

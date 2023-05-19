@@ -106,11 +106,30 @@ app.post("/auth", (request, response) => {
 
 app.use(auth);
 app.post("/posts", (request, response) => {
-  const { section, description, datetime, venue, created_at } = request.body;
+  const { section, description, datetime, venue, max_users } = request.body;
   try {
     pool.query(
-      "INSERT INTO posts (category_type_id, description, start_at, venue, created_at, user_id) VALUES ($1, $2, $3, $4, $5, $6)",
-      [section, description, datetime, venue, created_at, request.user.user_id],
+      "INSERT INTO posts (category_type_id, description, start_at, venue, created_at, max_users, user_id) VALUES ($1, $2, $3, $4, NOW(), $5, $6)",
+      [section, description, datetime, venue, max_users, request.user.user_id],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        response.status(201).send("Post added!");
+      }
+    );
+  } catch (error) {
+    console.log("jwt invalid");
+    response.status(401).send("not verified");
+  }
+});
+
+app.post("/join-user", (request, response) => {
+  const { post_id } = request.body;
+  try {
+      pool.query(
+        "INSERT INTO post_users (post_id, user_id, joined_at) VALUES ($1, $2, NOW())", 
+        [post_id, request.user.user_id],
       (error, results) => {
         if (error) {
           throw error;
@@ -130,12 +149,12 @@ app.get("/posts", (request, response) => {
   console.log(request.query);
   if (categoryId && categoryTypeId) {
     pool.query(
-      `
-        SELECT      c.name AS "category"
-        , ct.name AS "interest"
-        , ct.photo_img AS "photo_img"
-        , p.*
-        , u.username
+      `SELECT      c.name AS "category"
+                , ct.name AS "interest"
+                , ct.photo_img AS "photo_img"
+                , p.*
+                , u.username
+                , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
@@ -143,9 +162,17 @@ app.get("/posts", (request, response) => {
         ON          ct.category_id = c.id
         LEFT JOIN   users u
         ON          p.user_id = u.user_id
+        LEFT JOIN   post_users pu
+        ON          p.post_id = pu.post_id
         WHERE       p.start_at >= NOW()
         AND         c.id = $1
         AND         ct.id = $2
+        GROUP BY    c.name
+                  , ct.name
+                  , ct.photo_img
+                  , p.*
+                  , p.post_id
+                  , u.username
         ORDER BY    p.start_at ASC;`,
       [categoryId, categoryTypeId],
       (error, results) => {
@@ -158,12 +185,12 @@ app.get("/posts", (request, response) => {
     );
   } else if (categoryId) {
     pool.query(
-      `
-        SELECT      c.name AS "category"
-        , ct.name AS "interest"
-        , ct.photo_img AS "photo_img"
-        , p.*
-        , u.username
+      `SELECT      c.name AS "category"
+                , ct.name AS "interest"
+                , ct.photo_img AS "photo_img"
+                , p.*
+                , u.username
+                , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
@@ -171,8 +198,16 @@ app.get("/posts", (request, response) => {
         ON          ct.category_id = c.id
         LEFT JOIN   users u
         ON          p.user_id = u.user_id
+        LEFT JOIN   post_users pu
+        ON          p.post_id = pu.post_id
         WHERE       p.start_at >= NOW()
         AND         c.id = $1
+        GROUP BY    c.name
+                  , ct.name
+                  , ct.photo_img
+                  , p.*
+                  , p.post_id
+                  , u.username
         ORDER BY    p.start_at ASC;`,
       [categoryId],
       (error, results) => {
@@ -185,12 +220,12 @@ app.get("/posts", (request, response) => {
     );
   } else if (categoryTypeId) {
     pool.query(
-      `
-        SELECT      c.name AS "category"
-        , ct.name AS "interest"
-        , ct.photo_img AS "photo_img"
-        , p.*
-        , u.username
+      `SELECT      c.name AS "category"
+                , ct.name AS "interest"
+                , ct.photo_img AS "photo_img"
+                , p.*
+                , u.username
+                , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
@@ -198,8 +233,16 @@ app.get("/posts", (request, response) => {
         ON          ct.category_id = c.id
         LEFT JOIN   users u
         ON          p.user_id = u.user_id
+        LEFT JOIN   post_users pu
+        ON          p.post_id = pu.post_id
         WHERE       p.start_at >= NOW()
         AND         ct.id = $1
+        GROUP BY    c.name
+                  , ct.name
+                  , ct.photo_img
+                  , p.*
+                  , p.post_id
+                  , u.username
         ORDER BY    p.start_at ASC;`,
       [categoryTypeId],
       (error, results) => {
@@ -212,28 +255,55 @@ app.get("/posts", (request, response) => {
     );
   } else {
     pool.query(
-      `
-    SELECT      c.name AS "category"
+      `SELECT      c.name AS "category"
                 , ct.name AS "interest"
                 , ct.photo_img AS "photo_img"
                 , p.*
                 , u.username
-    FROM        posts p
-    INNER JOIN  category_types ct
-    ON          p.category_type_id = ct.id
-    INNER JOIN  categories c
-    ON          ct.category_id = c.id
-    LEFT JOIN   users u
-    ON          p.user_id = u.user_id
-    WHERE       p.start_at >= NOW()
-    ORDER BY    p.start_at ASC;`,
+                , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
+        FROM        posts p
+        INNER JOIN  category_types ct
+        ON          p.category_type_id = ct.id
+        INNER JOIN  categories c
+        ON          ct.category_id = c.id
+        LEFT JOIN   users u
+        ON          p.user_id = u.user_id
+        LEFT JOIN   post_users pu
+        ON          p.post_id = pu.post_id
+        WHERE       p.start_at >= NOW()
+        GROUP BY    c.name
+                  , ct.name
+                  , ct.photo_img
+                  , p.*
+                  , p.post_id
+                  , u.username
+        ORDER BY    p.start_at ASC;`,
       [],
       (error, results) => {
+        if (error) {
+            console.log(error)
+            return response.status(500).send(error)
+          }
         response.json(results.rows);
       }
     );
   }
 });
+
+// app.post("/join-user"), (request, response) => {
+//   const { post_id } = request.body;
+//   console.log(request.body)
+  // pool.query(
+  //   "INSERT INTO post_users (post_id, user_id, joined_at) VALUES ($1, $2, NOW())", 
+  //   [post_id, request.user.user_id],
+//   //   (error,results) => {
+//   //     if (error) {
+//   //       throw error
+//   //     }
+//   //     response.status(201).send('User joined this post!')
+//   //     }
+//   // )
+// }
 
 app.get("/categories/:id/category_types", (request, response) => {
   const category_id = request.params.id;

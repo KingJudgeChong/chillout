@@ -7,6 +7,9 @@ import CreatePost from "./CreatePost";
 import { BsCalendar3 } from "react-icons/bs";
 import { MdLocationOn, MdGroups } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
+import { formatDistanceToNow } from 'date-fns';
+import { parseISO } from 'date-fns';
+
 const Posts = () => {
   const [searchParams] = useSearchParams()
   const categoryId = searchParams.get('categoryId')
@@ -24,10 +27,34 @@ const Posts = () => {
         headers: { Authorization: localStorage.getItem("jwt") },
       })
       .then((response) => {
-        console.log(response.data, "strings");
+        console.log(response.data, "THIS IS YOUR POSTS");
         setPosts(response.data);
       });
   }, [categoryId, categoryTypeId]);
+
+  
+  const handleJoin = (post_id) => {
+    console.log('JOINED HERE')
+    console.log(post_id)
+    axios
+      .post(
+        "http://localhost:8000/join-user",
+        {
+          post_id: post_id,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("jwt")}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <div id="filthis">
@@ -89,7 +116,7 @@ const Posts = () => {
                           Posted by <span className="font-bold">{post.username}</span>
                         </div>
                         <div>
-                          12 hours ago
+                          {formatDistanceToNow(parseISO(post.created_at), { addSuffix: true })}
                         </div>
                       </div>
                     </div>
@@ -102,7 +129,6 @@ const Posts = () => {
                     </div>
                   </div>
                   <div className="h-auto">
-                    {/* <p>{post.username}</p> */}
                     <p id="yellowpost" className="w-11 font-gsr text-white ">
                       {post.category}
                     </p>
@@ -145,12 +171,12 @@ const Posts = () => {
                         <MdGroups />
                       </div>
                       <div className="font-gsr">
-                        Group Limit:{" "}
-                        <span className="font-gsr font-bold">20 people</span>
+                        Group Limit:
+                        <span className="font-gsr font-bold"> {post.max_users} people</span>
                       </div>
                     </div>
                     <div className="text-center border-2 mt-10 text-2xl">
-                      <button>BUTTON</button>
+                      <button onClick={() => {handleJoin(post.post_id)}}>JOIN ANO Tapunglay</button>
                     </div>
                   </div>
                 </div>
