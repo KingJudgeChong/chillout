@@ -15,9 +15,9 @@ const Posts = () => {
   const categoryId = searchParams.get('categoryId')
   const categoryTypeId = searchParams.get('categoryTypeId')
   const [posts, setPosts] = useState([]);
+  const user_id = localStorage.getItem("user_id");
   
-
-  useEffect(() => {
+  function fetchPosts() {
     const url = new URL('http://localhost:8000');
     url.pathname = '/posts';
     Number(categoryId) && url.searchParams.append('categoryId', categoryId);
@@ -30,11 +30,15 @@ const Posts = () => {
         console.log(response.data, "THIS IS YOUR POSTS");
         setPosts(response.data);
       });
+  }
+
+  useEffect(() => {
+    fetchPosts()
   }, [categoryId, categoryTypeId]);
 
   
   const handleJoin = (post_id) => {
-    console.log('JOINED HERE')
+    console.log('user JOINED')
     console.log(post_id)
     axios
       .post(
@@ -43,6 +47,29 @@ const Posts = () => {
           post_id: post_id,
         },
         {
+          headers: {
+            Authorization: `${localStorage.getItem("jwt")}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleLeave = (post_id) => {
+    console.log('user UNJOINED')
+    console.log(post_id)
+    axios
+      .delete(
+        "http://localhost:8000/unjoin-user",
+        {
+          data: {
+            post_id: post_id,
+          },
           headers: {
             Authorization: `${localStorage.getItem("jwt")}`,
           },
@@ -65,28 +92,25 @@ const Posts = () => {
           </div>
           <div id="dashedline"></div>
           <div className="mt-8 ml-3">
-            <CreatePost />
+            <CreatePost fetchPosts={fetchPosts}/>
           </div>
         </div>
-        <div id="locationpost" className="font-gsr mt-9 ml-2">
+        {/* <div id="locationpost" className="font-gsr mt-9 ml-2">
           Showing ongoing chillouts around
           <span id="darkyellow" className="font-bold">
             {" "}
             San Fernando, La Union
           </span>
-        </div>
+        </div> */}
         <div className="">
           <Filters />
         </div>
         <div id="allposts" className="grid grid-cols-2">
           {posts.length === 0 ? (
-            <div className="text-8xl text-center">
-              BOOM!
-              <img
-                alt=""
-                src="https://thumbs.gfycat.com/AcclaimedPortlyCarp-size_restricted.gif"
-              />
-              GULAT KA NOH
+            <div 
+            id="user_post2"
+            className="shadow-lg p-64">
+              Post a chillout
             </div>
           ) : (
             posts.map((post) => {
@@ -125,7 +149,7 @@ const Posts = () => {
                       id="upperright"
                       className="font-gsr font-bold tracking-wider"
                     >
-                      20 <span>are going</span>
+                      {post.ongoing_count}  <span>are going</span>
                     </div>
                   </div>
                   <div className="h-auto">
@@ -172,12 +196,16 @@ const Posts = () => {
                       </div>
                       <div className="font-gsr">
                         Group Limit:
-                        <span className="font-gsr font-bold"> {post.max_users} people</span>
+                        <span className="font-gsr font-bold"> {post.max_users}</span>
                       </div>
                     </div>
-                    <div className="text-center border-2 mt-10 text-2xl">
-                      <button onClick={() => {handleJoin(post.post_id)}}>JOIN ANO Tapunglay</button>
+                    <div className="text-center border-2 mt-10 text-2xl hover:bg-yellow-300">
+                      <button onClick={() => {handleJoin(post.post_id)}}>Click to Join</button>
                     </div>
+                    <div className="text-center">
+                      <button onClick={() => {handleLeave(post.post_id)}}>Click to Unjoin</button>
+                    </div>
+                    <div className="text-center">View attendees</div>
                   </div>
                 </div>
               );

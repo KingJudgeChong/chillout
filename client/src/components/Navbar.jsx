@@ -18,9 +18,9 @@ const Navbar = () => {
 
   return (
     <div id="bgnavbar" className="font-gsr absolute w-auto h-16 flex">
-      <div>Home</div>
-      <div>About</div>
-      <div>Contact me</div>
+      <div className="opacity-0">Home</div>
+      <div className="opacity-0">About</div>
+      <div className="opacity-0">Contact me</div>
       <div id="profilenavbar" className="mr-7 mt-2 flex">
         <div className="h-auto">
           <img

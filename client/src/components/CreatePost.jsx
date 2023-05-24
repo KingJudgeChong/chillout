@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 
-const CreatePost = () => {
+const CreatePost = (props) => {
   const [showModal, setShowModal] = React.useState(false);
   const [categoriesList, setCategoriesList] = useState("");
   const [sectionList, setSectionList] = useState([]);
@@ -33,7 +33,26 @@ const CreatePost = () => {
         }
       )
       .then(function (response) {
+        axios
+      .post(
+        "http://localhost:8000/join-user",
+        {
+          post_id: response.data.post_id,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("jwt")}`,
+          },
+        }
+      )
+      .then(function (response) {
         console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+        props.fetchPosts()
+        
       })
       .catch(function (error) {
         console.log(error);
@@ -175,13 +194,14 @@ const CreatePost = () => {
                     />
                   </div>
                   <div>
+                    {/* when clicked, open calendar */}
                     <input
                       className="w-80 border-x-0 border-t-0 text-lg"
                       id="started_at"
                       type="datetime-local"
                       onChange={handleChangeDateTime}
                       required={true}
-                    />--open me!
+                    />
                   </div>
 
                   <div>
@@ -199,12 +219,11 @@ const CreatePost = () => {
                     
                     <input
                       className="w-80 border-x-0 border-t-0"
-                      id="venue"
-                      type="text"
-                      pattern="[1-99]+"
-                      minlength='1'
-                      maxlength='2'
-                      placeholder="Group Limit: 1-99"
+                      id="hide-arrow"
+                      type="number"
+                      min={2}
+                      max={99}
+                      placeholder="Group Limit: 2-99"
                       onChange={handleChangeMaxUsers}
                       required={true}
                     />

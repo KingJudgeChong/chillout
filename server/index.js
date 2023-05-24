@@ -109,13 +109,13 @@ app.post("/posts", (request, response) => {
   const { section, description, datetime, venue, max_users } = request.body;
   try {
     pool.query(
-      "INSERT INTO posts (category_type_id, description, start_at, venue, created_at, max_users, user_id) VALUES ($1, $2, $3, $4, NOW(), $5, $6)",
+      "INSERT INTO posts (category_type_id, description, start_at, venue, created_at, max_users, user_id) VALUES ($1, $2, $3, $4, NOW(), $5, $6) RETURNING post_id, user_id",
       [section, description, datetime, venue, max_users, request.user.user_id],
       (error, results) => {
         if (error) {
           throw error;
         }
-        response.status(201).send("Post added!");
+        response.json(results.rows[0]);
       }
     );
   } catch (error) {
@@ -134,7 +134,7 @@ app.post("/join-user", (request, response) => {
         if (error) {
           throw error;
         }
-        response.status(201).send("Post added!");
+        response.status(201).send("User joined!");
       }
     );
   } catch (error) {
@@ -143,10 +143,18 @@ app.post("/join-user", (request, response) => {
   }
 });
 
+app.delete('/unjoin-user', (request, response) => {
+  const { post_id } = request.body
+  pool.query('DELETE FROM post_users WHERE user_id = $1 AND post_id = $2', [request.user.user_id, post_id], (error, results) => {
+      if (error){
+          throw error
+      }
+      response.status(200).send(`User in post_id = ${post_id} with user_id = ${request.user.user_id} is deleted`)
+  })
+})
+
 app.get("/posts", (request, response) => {
   const { categoryId, categoryTypeId } = request.query;
-  console.log("/posts");
-  console.log(request.query);
   if (categoryId && categoryTypeId) {
     pool.query(
       `SELECT      c.name AS "category"
@@ -290,25 +298,8 @@ app.get("/posts", (request, response) => {
   }
 });
 
-// app.post("/join-user"), (request, response) => {
-//   const { post_id } = request.body;
-//   console.log(request.body)
-  // pool.query(
-  //   "INSERT INTO post_users (post_id, user_id, joined_at) VALUES ($1, $2, NOW())", 
-  //   [post_id, request.user.user_id],
-//   //   (error,results) => {
-//   //     if (error) {
-//   //       throw error
-//   //     }
-//   //     response.status(201).send('User joined this post!')
-//   //     }
-//   // )
-// }
-
 app.get("/categories/:id/category_types", (request, response) => {
   const category_id = request.params.id;
-  console.log("LOOK DOWN");
-  console.log(typeof category_id);
   pool.query(
     "SELECT * FROM category_types WHERE category_id=$1",
     [category_id ? category_id : null],
