@@ -11,8 +11,7 @@ const CreatePost = (props) => {
   const [datetime, setDateTime] = useState("");
   const [section, setSection] = useState("");
   const [venue, setVenue] = useState("");
-  const [maxUsers, setMaxUsers] = useState("")
-
+  const [maxUsers, setMaxUsers] = useState("");
 
   const createPost = (event) => {
     event.preventDefault();
@@ -33,26 +32,7 @@ const CreatePost = (props) => {
         }
       )
       .then(function (response) {
-        axios
-      .post(
-        "http://localhost:8000/join-user",
-        {
-          post_id: response.data.post_id,
-        },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem("jwt")}`,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-        props.fetchPosts()
-        
+        props.fetchPosts();
       })
       .catch(function (error) {
         console.log(error);
@@ -86,7 +66,7 @@ const CreatePost = (props) => {
         headers: { Authorization: localStorage.getItem("jwt") },
       })
       .then((response) => {
-        console.log(localStorage.getItem("jwt"))
+        console.log(localStorage.getItem("jwt"));
         console.log(response.data);
         setCategoriesList(response.data);
         axios
@@ -146,7 +126,6 @@ const CreatePost = (props) => {
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
                   <div>
-                    
                     <select
                       className="w-80 border-x-0 border-t-0"
                       id="category"
@@ -164,7 +143,6 @@ const CreatePost = (props) => {
                   </div>
 
                   <div>
-                    
                     <select
                       className="w-80 border-x-0 border-t-0"
                       id="section"
@@ -181,7 +159,7 @@ const CreatePost = (props) => {
                     </select>
                   </div>
 
-                  <div>                   
+                  <div>
                     <textarea
                       className="w-96 border-x-0 border-t-0"
                       id="description"
@@ -205,7 +183,6 @@ const CreatePost = (props) => {
                   </div>
 
                   <div>
-                    
                     <input
                       className="w-80 border-x-0 border-t-0"
                       id="venue"
@@ -216,7 +193,6 @@ const CreatePost = (props) => {
                     />
                   </div>
                   <div>
-                    
                     <input
                       className="w-80 border-x-0 border-t-0"
                       id="hide-arrow"
@@ -242,7 +218,7 @@ const CreatePost = (props) => {
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="submit"
                   >
-                    Post 
+                    Post
                   </button>
                 </div>
               </div>

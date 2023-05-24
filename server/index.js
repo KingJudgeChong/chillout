@@ -105,22 +105,24 @@ app.post("/auth", (request, response) => {
 });
 
 app.use(auth);
-app.post("/posts", (request, response) => {
+app.post("/posts", async (request, response) => {
   const { section, description, datetime, venue, max_users } = request.body;
   try {
-    pool.query(
+    await pool.query("BEGIN")
+    const createdPostResult = await pool.query(
       "INSERT INTO posts (category_type_id, description, start_at, venue, created_at, max_users, user_id) VALUES ($1, $2, $3, $4, NOW(), $5, $6) RETURNING post_id, user_id",
       [section, description, datetime, venue, max_users, request.user.user_id],
-      (error, results) => {
-        if (error) {
-          throw error;
-        }
-        response.json(results.rows[0]);
-      }
     );
+    const createdPost = createdPostResult.rows[0]
+    await pool.query(
+      "INSERT INTO post_users (post_id, user_id, joined_at) VALUES ($1, $2, NOW())",
+      [createdPost.post_id, request.user.user_id,]
+    ) 
+    await pool.query("COMMIT")
+    response.json(createdPost);
   } catch (error) {
-    console.log("jwt invalid");
-    response.status(401).send("not verified");
+    console.error(error)
+    response.status(500).send("Something went wrong");
   }
 });
 
@@ -163,6 +165,7 @@ app.get("/posts", (request, response) => {
                 , p.*
                 , u.username
                 , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
+                , pu2.post_user_id is NOT NULL AS "is_joined_already"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
@@ -172,6 +175,8 @@ app.get("/posts", (request, response) => {
         ON          p.user_id = u.user_id
         LEFT JOIN   post_users pu
         ON          p.post_id = pu.post_id
+        LEFT JOIN   post_users pu2
+        ON          p.post_id = pu2.post_id AND pu2.user_id = $3
         WHERE       p.start_at >= NOW()
         AND         c.id = $1
         AND         ct.id = $2
@@ -181,8 +186,9 @@ app.get("/posts", (request, response) => {
                   , p.*
                   , p.post_id
                   , u.username
+                  , pu2.post_user_id
         ORDER BY    p.start_at ASC;`,
-      [categoryId, categoryTypeId],
+      [categoryId, categoryTypeId, request.user.user_id],
       (error, results) => {
         if (error) {
           console.log(error);
@@ -199,6 +205,7 @@ app.get("/posts", (request, response) => {
                 , p.*
                 , u.username
                 , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
+                , pu2.post_user_id is NOT NULL AS "is_joined_already"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
@@ -208,6 +215,8 @@ app.get("/posts", (request, response) => {
         ON          p.user_id = u.user_id
         LEFT JOIN   post_users pu
         ON          p.post_id = pu.post_id
+        LEFT JOIN   post_users pu2
+        ON          p.post_id = pu2.post_id AND pu2.user_id = $2
         WHERE       p.start_at >= NOW()
         AND         c.id = $1
         GROUP BY    c.name
@@ -216,8 +225,9 @@ app.get("/posts", (request, response) => {
                   , p.*
                   , p.post_id
                   , u.username
+                  , pu2.post_user_id
         ORDER BY    p.start_at ASC;`,
-      [categoryId],
+      [categoryId, request.user.user_id],
       (error, results) => {
         if (error) {
           console.log(error);
@@ -234,6 +244,7 @@ app.get("/posts", (request, response) => {
                 , p.*
                 , u.username
                 , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
+                , pu2.post_user_id is NOT NULL AS "is_joined_already"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
@@ -243,6 +254,8 @@ app.get("/posts", (request, response) => {
         ON          p.user_id = u.user_id
         LEFT JOIN   post_users pu
         ON          p.post_id = pu.post_id
+        LEFT JOIN   post_users pu2
+        ON          p.post_id = pu2.post_id AND pu2.user_id = $2
         WHERE       p.start_at >= NOW()
         AND         ct.id = $1
         GROUP BY    c.name
@@ -251,8 +264,9 @@ app.get("/posts", (request, response) => {
                   , p.*
                   , p.post_id
                   , u.username
+                  , pu2.post_user_id
         ORDER BY    p.start_at ASC;`,
-      [categoryTypeId],
+      [categoryTypeId, request.user.user_id],
       (error, results) => {
         if (error) {
           console.log(error);
@@ -269,6 +283,7 @@ app.get("/posts", (request, response) => {
                 , p.*
                 , u.username
                 , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
+                , pu2.post_user_id is NOT NULL AS "is_joined_already"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
@@ -278,6 +293,8 @@ app.get("/posts", (request, response) => {
         ON          p.user_id = u.user_id
         LEFT JOIN   post_users pu
         ON          p.post_id = pu.post_id
+        LEFT JOIN   post_users pu2
+        ON          p.post_id = pu2.post_id AND pu2.user_id = $1
         WHERE       p.start_at >= NOW()
         GROUP BY    c.name
                   , ct.name
@@ -285,8 +302,9 @@ app.get("/posts", (request, response) => {
                   , p.*
                   , p.post_id
                   , u.username
+                  , pu2.post_user_id
         ORDER BY    p.start_at ASC;`,
-      [],
+      [request.user.user_id],
       (error, results) => {
         if (error) {
             console.log(error)
