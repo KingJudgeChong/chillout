@@ -7,21 +7,25 @@ import CreatePost from "./CreatePost";
 import { BsCalendar3 } from "react-icons/bs";
 import { MdLocationOn, MdGroups } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
-import { formatDistanceToNow } from 'date-fns';
-import { parseISO } from 'date-fns';
+import { formatDistanceToNow } from "date-fns";
+import { parseISO } from "date-fns";
+import { HiDotsVertical } from "react-icons/hi";
+import { FaChevronRight } from "react-icons/fa";
 
 const Posts = () => {
-  const [searchParams] = useSearchParams()
-  const categoryId = searchParams.get('categoryId')
-  const categoryTypeId = searchParams.get('categoryTypeId')
+  const [searchParams] = useSearchParams();
+  const categoryId = searchParams.get("categoryId");
+  const categoryTypeId = searchParams.get("categoryTypeId");
   const [posts, setPosts] = useState([]);
-  const user_id = localStorage.getItem("user_id");
-  
+  const user_id = Number(localStorage.getItem("user_id"));
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
   function fetchPosts() {
-    const url = new URL('http://localhost:8000');
-    url.pathname = '/posts';
-    Number(categoryId) && url.searchParams.append('categoryId', categoryId);
-    Number(categoryTypeId) && url.searchParams.append('categoryTypeId', categoryTypeId);
+    const url = new URL("http://localhost:8000");
+    url.pathname = "/posts";
+    Number(categoryId) && url.searchParams.append("categoryId", categoryId);
+    Number(categoryTypeId) &&
+      url.searchParams.append("categoryTypeId", categoryTypeId);
     axios
       .get(url, {
         headers: { Authorization: localStorage.getItem("jwt") },
@@ -33,13 +37,16 @@ const Posts = () => {
   }
 
   useEffect(() => {
-    fetchPosts()
+    fetchPosts();
   }, [categoryId, categoryTypeId]);
 
-  
+  const handleDropdownToggle = (post_id) => {
+    setDropdownVisible((prevState) => (prevState === post_id ? null : post_id));
+  };
+
   const handleJoin = (post_id) => {
-    console.log('user JOINED')
-    console.log(post_id)
+    console.log("user JOINED");
+    console.log(post_id);
     axios
       .post(
         "http://localhost:8000/join-user",
@@ -54,6 +61,7 @@ const Posts = () => {
       )
       .then(function (response) {
         console.log(response);
+        fetchPosts();
       })
       .catch(function (error) {
         console.log(error);
@@ -61,22 +69,17 @@ const Posts = () => {
   };
 
   const handleLeave = (post_id) => {
-    console.log('user UNJOINED')
-    console.log(post_id)
+    console.log("user UNJOINED");
+    console.log(post_id);
     axios
-      .delete(
-        "http://localhost:8000/unjoin-user",
-        {
-          data: {
-            post_id: post_id,
-          },
-          headers: {
-            Authorization: `${localStorage.getItem("jwt")}`,
-          },
-        }
-      )
+      .delete(`http://localhost:8000/posts/${post_id}/post_users`, {
+        headers: {
+          Authorization: `${localStorage.getItem("jwt")}`,
+        },
+      })
       .then(function (response) {
         console.log(response);
+        fetchPosts();
       })
       .catch(function (error) {
         console.log(error);
@@ -92,7 +95,7 @@ const Posts = () => {
           </div>
           <div id="dashedline"></div>
           <div className="mt-8 ml-3">
-            <CreatePost fetchPosts={fetchPosts}/>
+            <CreatePost fetchPosts={fetchPosts} />
           </div>
         </div>
         {/* <div id="locationpost" className="font-gsr mt-9 ml-2">
@@ -107,9 +110,7 @@ const Posts = () => {
         </div>
         <div id="allposts" className="grid grid-cols-2">
           {posts.length === 0 ? (
-            <div 
-            id="user_post2"
-            className="shadow-lg p-64">
+            <div id="user_post2" className="shadow-lg p-64">
               Post a chillout
             </div>
           ) : (
@@ -126,30 +127,49 @@ const Posts = () => {
                       alt=""
                       src={post.photo_img}
                     />
-                    
+                    <div
+                      id="upperleft"
+                      className="bg-[rgba(235,165,29,0.6)] rounded-full h-8"
+                    >
+                      <button
+                        onClick={() => handleDropdownToggle(post.post_id)}
+                      >
+                        <HiDotsVertical className="text-3xl shadow-lg " />
+                      </button>
+
+                      {dropdownVisible === post.post_id && (
+                        <div id="dropdown-list">
+                          <button onClick={""}>Edit</button>
+                          <button onClick={""}>Delete</button>
+                        </div>
+                      )}
+                    </div>
                     <div id="lowerleft" className="tracking-wide">
                       <div>
-                        <img 
+                        <img
                           className="w-12 border-2 h-11 rounded-full"
                           src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-                          alt=''
+                          alt=""
                         />
                       </div>
                       <div className="flex flex-col">
                         <div>
-                          Posted by <span className="font-bold">{post.username}</span>
+                          Posted by{" "}
+                          <span className="font-bold">{post.username}</span>
                         </div>
                         <div>
-                          {formatDistanceToNow(parseISO(post.created_at), { addSuffix: true })}
+                          {formatDistanceToNow(parseISO(post.created_at), {
+                            addSuffix: true,
+                          })}
                         </div>
                       </div>
                     </div>
-                    
+
                     <div
                       id="upperright"
                       className="font-gsr font-bold tracking-wider"
                     >
-                      {post.ongoing_count}  <span>are going</span>
+                      {post.ongoing_count} <span>are going</span>
                     </div>
                   </div>
                   <div className="h-auto">
@@ -173,7 +193,7 @@ const Posts = () => {
                           {" "}
                           {format(
                             new Date(post.start_at),
-                            "MMM dd - hh:mm a"
+                            "MMM d, yyyy h:mm a, EEE"
                           )}
                         </span>
                       </div>
@@ -196,16 +216,69 @@ const Posts = () => {
                       </div>
                       <div className="font-gsr">
                         Group Limit:
-                        <span className="font-gsr font-bold"> {post.max_users}</span>
+                        <span className="font-gsr font-bold">
+                          {" "}
+                          {post.max_users}
+                        </span>
                       </div>
                     </div>
-                    <div className="text-center border-2 mt-10 text-2xl hover:bg-yellow-300">
-                      <button onClick={() => {handleJoin(post.post_id)}}>Click to Join</button>
+
+                    <div className="h-full border-2 border-red-800">
+                      {post.ongoing_count >= post.max_users ? (
+                        <div className="text-center mt-10 text-2xl">
+                          Max group limit reached!
+                        </div>
+                      ) : (
+                        <div className="text-center mt-10 text-2xl">
+                          {post.user_id ===
+                          user_id ? null : post.is_joined_already ? (
+                            <div className="toggle-container">
+                              <button
+                                onClick={() => {
+                                  handleLeave(post.post_id);
+                                }}
+                                className={`toggle-button leave ${
+                                  post.is_joined_already ? "active" : ""
+                                }`}
+                              >
+                                Leave
+                              </button>
+                              <div
+                                className={`toggle-switch ${
+                                  post.is_joined_already ? "active" : ""
+                                }`}
+                              ></div>
+                            </div>
+                          ) : (
+                            <div className="toggle-container">
+                              <div
+                                className={`toggle-switch ${
+                                  !post.is_joined_already ? "active" : ""
+                                }`}
+                              ></div>
+                              <button
+                                onClick={() => {
+                                  handleJoin(post.post_id);
+                                }}
+                                className={`toggle-button join ${
+                                  !post.is_joined_already ? "active" : ""
+                                }`}
+                              >
+                                <div className="flex gap-1">
+                                  <div className="pl-5">Join</div>
+                                  <div className="text-black bg-white rounded-2xl w-8">
+                                    <FaChevronRight className="mt-1 ml-1" />
+                                  </div>
+                                </div>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <div className="text-center">
+                        <button>View attendees</button>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <button onClick={() => {handleLeave(post.post_id)}}>Click to Unjoin</button>
-                    </div>
-                    <div className="text-center">View attendees</div>
                   </div>
                 </div>
               );

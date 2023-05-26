@@ -183,6 +183,7 @@ const CreatePost = (props) => {
                   </div>
 
                   <div>
+                    try:
                     <input
                       className="w-80 border-x-0 border-t-0"
                       id="venue"

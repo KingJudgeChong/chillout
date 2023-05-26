@@ -270,6 +270,38 @@
   color: #FFFFFF;
 }
 
+#upperleft {
+  position: absolute;
+  top: 15.5px;
+  left: 16px;
+  color: black;
+}
+
+
+
+#dropdown-list {
+  position: absolute;
+  top: 0;
+  left: 4px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  z-index: 1;
+  margin-left: 20px;
+}
+
+#dropdown-list button {
+  background: none;
+  border: none;
+  padding: 4px;
+  margin-bottom: 4px;
+}
+
+#dropdown-list button:hover {
+  background-color: #f2f2f2;
+}
+
 #lowerleft {
   display: flex;
   position: absolute;
@@ -363,6 +395,63 @@
   margin-right: 10px;
   margin-left: -4px;
 }
+
+.toggle-container {
+  display: inline-block;
+  position: relative;
+  background-color: #F0F0F0;
+  border-radius: 20px;
+  width: 350px;
+  height: 50px;
+}
+
+.toggle-button {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  background-color: #EBA51D;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  transition: all 4s;
+  cursor: pointer;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.toggle-switch {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 36px;
+  height: 36px;
+  background-color: white;
+  border-radius: 50%;
+  transition: left 3s;
+  z-index: 1;
+}
+
+.toggle-button.leave.active {
+  transform: translateX(60px);
+}
+
+.toggle-button.leave.active + .toggle-switch {
+  transition-delay: 5s;
+  left: 62px;
+}
+
+.toggle-button.join.active {
+  transform: translateX(0);
+}
+
+.toggle-button.join.active + .toggle-switch {
+  transition-delay: 5s;
+  left: 2px;
+}
+
+
+
 
 #darkyellow {
   color: #EBA51D;

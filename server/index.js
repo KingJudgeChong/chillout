@@ -145,14 +145,25 @@ app.post("/join-user", (request, response) => {
   }
 });
 
-app.delete('/unjoin-user', (request, response) => {
-  const { post_id } = request.body
+app.delete('/posts/:post_id/post_users', (request, response) => {
+  const { post_id } = request.params
   pool.query('DELETE FROM post_users WHERE user_id = $1 AND post_id = $2', [request.user.user_id, post_id], (error, results) => {
       if (error){
           throw error
       }
       response.status(200).send(`User in post_id = ${post_id} with user_id = ${request.user.user_id} is deleted`)
   })
+})
+
+app.delete('/posts/:post_id', async (request, response) => {
+  const { post_id } = request.params
+  try {
+    await pool.query('DELETE FROM posts WHERE post_id = $1', [post_id])
+    response.status(204).send(null)
+  }
+  catch (error) {
+    console.error(error)
+  }
 })
 
 app.get("/posts", (request, response) => {
@@ -165,7 +176,7 @@ app.get("/posts", (request, response) => {
                 , p.*
                 , u.username
                 , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
-                , pu2.post_user_id is NOT NULL AS "is_joined_already"
+                , pu2.post_user_id IS NOT NULL AS "is_joined_already"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
@@ -205,7 +216,7 @@ app.get("/posts", (request, response) => {
                 , p.*
                 , u.username
                 , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
-                , pu2.post_user_id is NOT NULL AS "is_joined_already"
+                , pu2.post_user_id IS NOT NULL AS "is_joined_already"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
@@ -244,7 +255,7 @@ app.get("/posts", (request, response) => {
                 , p.*
                 , u.username
                 , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
-                , pu2.post_user_id is NOT NULL AS "is_joined_already"
+                , pu2.post_user_id IS NOT NULL AS "is_joined_already"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
@@ -283,7 +294,7 @@ app.get("/posts", (request, response) => {
                 , p.*
                 , u.username
                 , COUNT(DISTINCT pu.post_user_id) AS "ongoing_count"
-                , pu2.post_user_id is NOT NULL AS "is_joined_already"
+                , pu2.post_user_id IS NOT NULL AS "is_joined_already"
         FROM        posts p
         INNER JOIN  category_types ct
         ON          p.category_type_id = ct.id
