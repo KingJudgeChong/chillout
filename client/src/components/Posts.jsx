@@ -86,6 +86,22 @@ const Posts = () => {
       });
   };
 
+  const handleDeletePost = (post_id) => {
+    axios
+      .delete(`http://localhost:8000/posts/${post_id}`, {
+        headers: {
+          Authorization: `${localStorage.getItem("jwt")}`
+        }
+      })
+      .then(function (response) {
+        console.log(response, "RESPONSED");
+        fetchPosts();
+      })
+      .catch(function (error) {
+        console.log(error, "ERROR")
+      })
+  }
+
   return (
     <div id="filthis">
       <div id="marginpost" className="flex flex-col">
@@ -127,9 +143,10 @@ const Posts = () => {
                       alt=""
                       src={post.photo_img}
                     />
+                    {post.user_id === user_id && (
                     <div
                       id="upperleft"
-                      className="bg-[rgba(235,165,29,0.6)] rounded-full h-8"
+                      className="bg-gradient-to-r from-teal-400 to-lime-400 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 rounded-full h-8"
                     >
                       <button
                         onClick={() => handleDropdownToggle(post.post_id)}
@@ -139,11 +156,12 @@ const Posts = () => {
 
                       {dropdownVisible === post.post_id && (
                         <div id="dropdown-list">
-                          <button onClick={""}>Edit</button>
-                          <button onClick={""}>Delete</button>
+                          <button onClick={() => handleDeletePost}>Edit</button>
+                          <button onClick={() => handleDeletePost(post.post_id)}>Delete</button>
                         </div>
                       )}
                     </div>
+                    )}
                     <div id="lowerleft" className="tracking-wide">
                       <div>
                         <img

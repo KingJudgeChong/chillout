@@ -158,8 +158,8 @@ app.delete('/posts/:post_id/post_users', (request, response) => {
 app.delete('/posts/:post_id', async (request, response) => {
   const { post_id } = request.params
   try {
-    await pool.query('DELETE FROM posts WHERE post_id = $1', [post_id])
-    response.status(204).send(null)
+    await pool.query('DELETE FROM posts WHERE post_id = $1 AND user_id = $2', [post_id, request.user.user_id])
+    response.status(200).send(null)
   }
   catch (error) {
     console.error(error)
