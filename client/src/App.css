@@ -257,10 +257,9 @@
 
 #user_post2{
   height: 705px;
-  border: 2px dashed var(--text-light-dbdbdb);
-  border: 2px dashed #DBDBDB;
-  border-radius: 10px;
-  background: transparent;
+  border: 5px dashed #DBDBDB;
+  border-radius: 0.25rem;
+  background-color: rgba(0, 0, 0, 0); 
 }
 
 
@@ -400,57 +399,102 @@
   display: inline-block;
   position: relative;
   background-color: #F0F0F0;
-  border-radius: 20px;
-  width: 350px;
-  height: 50px;
+  border-radius: 40px;
+  width: 450px;
+  height: 64px;
+  margin-top: 5px;
 }
 
 .toggle-button {
   position: relative;
   display: inline-block;
-  width: 100px;
-  height: 40px;
+  margin-top: -1px;
+  width: 179px;
+  height: 64px;
   background-color: #EBA51D;
   color: #FFFFFF;
   border: none;
-  border-radius: 20px;
-  transition: all 4s;
+  border-radius: 40px;
+  transition: all 0.5s;
   cursor: pointer;
   z-index: 2;
   overflow: hidden;
+
 }
 
-.toggle-switch {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 36px;
-  height: 36px;
-  background-color: white;
-  border-radius: 50%;
-  transition: left 3s;
-  z-index: 1;
+.toggle-button2 {
+  position: relative;
+  display: inline-block;
+  margin-top: -1px;
+  width: 100%;
+  height: 64px;
+  background-color: #EBA51D;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 40px;
+  transition: all 0.5s;
+  cursor: pointer;
+  z-index: 2;
+  overflow: hidden;
+
 }
 
-.toggle-button.leave.active {
-  transform: translateX(60px);
-}
 
-.toggle-button.leave.active + .toggle-switch {
-  transition-delay: 5s;
-  left: 62px;
+#joinbutton {
+  font-size: 0.940rem;
+  line-height: 1.25rem;
 }
 
 .toggle-button.join.active {
-  transform: translateX(0);
+  transform: translateX(0px);
+  left: 0px;
 }
 
 .toggle-button.join.active + .toggle-switch {
-  transition-delay: 5s;
-  left: 2px;
+  transition-delay: 1s;
 }
 
 
+.toggle-button2.leave.active {
+  transform: translateX(0px);
+}
+
+.toggle-button2.leave.active + .toggle-switch {
+  transition-delay: 1s;
+  left: 62px;
+}
+
+#viewattendees {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  transition: opacity 2s; 
+}
+
+#userjoined {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  transition: transform 2s;
+  transform: scale(0);
+  color: white;
+}
+
+#viewattendees.show {
+  opacity: 1;
+}
+
+#userjoined.show {
+  transform: scale(1);
+}
 
 
 #darkyellow {

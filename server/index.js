@@ -166,11 +166,26 @@ app.delete('/posts/:post_id', async (request, response) => {
   }
 })
 
+app.put("/posts/:post_id", async (request, response) => {
+const { post_id } = request.params
+const { section, description, datetime, venue, max_users } = request.body;
+  try {
+    await pool.query(
+      "UPDATE posts SET category_type_id = $1, description = $2, start_at = $3, venue = $4, max_users = $5, user_id = $6, updated_at = NOW() WHERE post_id = $7 RETURNING post_id, user_id)",
+      [section, description, datetime, venue, max_users, request.user.user_id, post_id],);
+    response.status(200).send("POST UPDATED!")
+    }
+    catch (error) {
+      console.error(error)
+    }
+})
+
 app.get("/posts", (request, response) => {
   const { categoryId, categoryTypeId } = request.query;
   if (categoryId && categoryTypeId) {
     pool.query(
       `SELECT      c.name AS "category"
+                , c.id AS "category_id"
                 , ct.name AS "interest"
                 , ct.photo_img AS "photo_img"
                 , p.*
@@ -198,6 +213,7 @@ app.get("/posts", (request, response) => {
                   , p.post_id
                   , u.username
                   , pu2.post_user_id
+                  , c.id
         ORDER BY    p.start_at ASC;`,
       [categoryId, categoryTypeId, request.user.user_id],
       (error, results) => {
@@ -212,6 +228,7 @@ app.get("/posts", (request, response) => {
     pool.query(
       `SELECT      c.name AS "category"
                 , ct.name AS "interest"
+                , c.id AS "category_id"
                 , ct.photo_img AS "photo_img"
                 , p.*
                 , u.username
@@ -237,6 +254,7 @@ app.get("/posts", (request, response) => {
                   , p.post_id
                   , u.username
                   , pu2.post_user_id
+                  , c.id
         ORDER BY    p.start_at ASC;`,
       [categoryId, request.user.user_id],
       (error, results) => {
@@ -251,6 +269,7 @@ app.get("/posts", (request, response) => {
     pool.query(
       `SELECT      c.name AS "category"
                 , ct.name AS "interest"
+                , c.id AS "category_id"
                 , ct.photo_img AS "photo_img"
                 , p.*
                 , u.username
@@ -276,6 +295,7 @@ app.get("/posts", (request, response) => {
                   , p.post_id
                   , u.username
                   , pu2.post_user_id
+                  , c.id
         ORDER BY    p.start_at ASC;`,
       [categoryTypeId, request.user.user_id],
       (error, results) => {
@@ -290,6 +310,7 @@ app.get("/posts", (request, response) => {
     pool.query(
       `SELECT      c.name AS "category"
                 , ct.name AS "interest"
+                , c.id AS "category_id"
                 , ct.photo_img AS "photo_img"
                 , p.*
                 , u.username
@@ -314,6 +335,7 @@ app.get("/posts", (request, response) => {
                   , p.post_id
                   , u.username
                   , pu2.post_user_id
+                  , c.id
         ORDER BY    p.start_at ASC;`,
       [request.user.user_id],
       (error, results) => {
@@ -321,6 +343,7 @@ app.get("/posts", (request, response) => {
             console.log(error)
             return response.status(500).send(error)
           }
+        console.log(results.rows)
         response.json(results.rows);
       }
     );

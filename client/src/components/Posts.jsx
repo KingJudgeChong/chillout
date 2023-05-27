@@ -10,7 +10,10 @@ import { useSearchParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { parseISO } from "date-fns";
 import { HiDotsVertical } from "react-icons/hi";
-import { FaChevronRight } from "react-icons/fa";
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
+import EditPost from "./EditPost";
+import ViewAttendees from "./ViewAttendees";
+import { HiOutlinePlus } from "react-icons/hi";
 
 const Posts = () => {
   const [searchParams] = useSearchParams();
@@ -19,6 +22,15 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
   const user_id = Number(localStorage.getItem("user_id"));
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const OpenHover = () => {
+    setIsHovered(true);
+  };
+
+  const CloseHover = () => {
+    setIsHovered(false);
+  };
 
   function fetchPosts() {
     const url = new URL("http://localhost:8000");
@@ -90,17 +102,17 @@ const Posts = () => {
     axios
       .delete(`http://localhost:8000/posts/${post_id}`, {
         headers: {
-          Authorization: `${localStorage.getItem("jwt")}`
-        }
+          Authorization: `${localStorage.getItem("jwt")}`,
+        },
       })
       .then(function (response) {
         console.log(response, "RESPONSED");
         fetchPosts();
       })
       .catch(function (error) {
-        console.log(error, "ERROR")
-      })
-  }
+        console.log(error, "ERROR");
+      });
+  };
 
   return (
     <div id="filthis">
@@ -126,8 +138,9 @@ const Posts = () => {
         </div>
         <div id="allposts" className="grid grid-cols-2">
           {posts.length === 0 ? (
-            <div id="user_post2" className="shadow-lg p-64">
-              Post a chillout
+            <div id="user_post2" className="shadow-2xl text-center font-gsr text-[26px] py-[50%] text-[#AFAFAF]">
+              <div className="mx-[46%] mb-4 text-[48px]"><HiOutlinePlus /></div>
+              <div className="font-bold">Post a Chillout</div>
             </div>
           ) : (
             posts.map((post) => {
@@ -144,23 +157,27 @@ const Posts = () => {
                       src={post.photo_img}
                     />
                     {post.user_id === user_id && (
-                    <div
-                      id="upperleft"
-                      className="bg-gradient-to-r from-teal-400 to-lime-400 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 rounded-full h-8"
-                    >
-                      <button
-                        onClick={() => handleDropdownToggle(post.post_id)}
+                      <div
+                        id="upperleft"
+                        className="bg-gradient-to-r from-teal-400 to-lime-400 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 rounded-full h-8"
                       >
-                        <HiDotsVertical className="text-3xl shadow-lg " />
-                      </button>
+                        <button
+                          onClick={() => handleDropdownToggle(post.post_id)}
+                        >
+                          <HiDotsVertical className="text-3xl shadow-lg " />
+                        </button>
 
-                      {dropdownVisible === post.post_id && (
-                        <div id="dropdown-list">
-                          <button onClick={() => handleDeletePost}>Edit</button>
-                          <button onClick={() => handleDeletePost(post.post_id)}>Delete</button>
-                        </div>
-                      )}
-                    </div>
+                        {dropdownVisible === post.post_id && (
+                          <div id="dropdown-list">
+                            <EditPost post={post} />
+                            <button
+                              onClick={() => handleDeletePost(post.post_id)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     )}
                     <div id="lowerleft" className="tracking-wide">
                       <div>
@@ -241,60 +258,116 @@ const Posts = () => {
                       </div>
                     </div>
 
-                    <div className="h-full border-2 border-red-800">
-                      {post.ongoing_count >= post.max_users ? (
-                        <div className="text-center mt-10 text-2xl">
-                          Max group limit reached!
-                        </div>
-                      ) : (
-                        <div className="text-center mt-10 text-2xl">
-                          {post.user_id ===
-                          user_id ? null : post.is_joined_already ? (
-                            <div className="toggle-container">
+                    <div className="h-full">
+                      <div className="text-2xl ml-[3.20rem]">
+                        {!isHovered && post.ongoing_count >= post.max_users ? (
+                          <div className="toggle-container mb-[0.35rem] font-bold">
+                            {post.user_id !== user_id &&
+                            post.is_joined_already ? (
+                              <div
+                                id="joinbutton"
+                                className="pt-7 font-gsr text-center text-[#AFAFAF]"
+                                onMouseEnter={OpenHover}
+                              >
+                                Slots Full
+                              </div>
+                            ) : (
+                              <div
+                                id="joinbutton"
+                                className="pt-7 font-gsr text-center text-[#AFAFAF]"
+                              >
+                                Slots Full
+                              </div>
+                            )}
+                          </div>
+                        ) : isHovered &&
+                          post.is_joined_already &&
+                          post.ongoing_count >= post.max_users ? (
+                          <div className="toggle-container">
+                            <div
+                              className={`toggle-button2 leave ${
+                                post.is_joined_already ? "active" : ""
+                              }`}
+                            >
                               <button
                                 onClick={() => {
                                   handleLeave(post.post_id);
                                 }}
-                                className={`toggle-button leave ${
-                                  post.is_joined_already ? "active" : ""
-                                }`}
+                                onMouseLeave={CloseHover}
                               >
-                                Leave
-                              </button>
-                              <div
-                                className={`toggle-switch ${
-                                  post.is_joined_already ? "active" : ""
-                                }`}
-                              ></div>
-                            </div>
-                          ) : (
-                            <div className="toggle-container">
-                              <div
-                                className={`toggle-switch ${
-                                  !post.is_joined_already ? "active" : ""
-                                }`}
-                              ></div>
-                              <button
-                                onClick={() => {
-                                  handleJoin(post.post_id);
-                                }}
-                                className={`toggle-button join ${
-                                  !post.is_joined_already ? "active" : ""
-                                }`}
-                              >
-                                <div className="flex gap-1">
-                                  <div className="pl-5">Join</div>
-                                  <div className="text-black bg-white rounded-2xl w-8">
-                                    <FaChevronRight className="mt-1 ml-1" />
+                                <div className="flex pt-4">
+                                  <div
+                                    id="joinbutton"
+                                    className="pl-[6rem] pt-3 pr-5 font-gsr"
+                                  >
+                                    You are going to this chillout. See you!
+                                  </div>
+                                  <div className="text-[#EBA51D] bg-white rounded-2xl w-8 ml-11">
+                                    <FaChevronLeft className="mt-1 ml-[0.17rem]" />
                                   </div>
                                 </div>
                               </button>
                             </div>
-                          )}
-                        </div>
-                      )}
-                      <div className="text-center">
-                        <button>View attendees</button>
+                          </div>
+                        ) : post.user_id == user_id &&
+                          post.ongoing_count < post.max_users ? (
+                          <div className="h-[74px]"></div>
+                        ) : post.is_joined_already ? (
+                          <div className="toggle-container">
+                            <div
+                              className={`toggle-button2 leave ${
+                                post.is_joined_already ? "active" : ""
+                              }`}
+                            >
+                              <button
+                                onClick={() => {
+                                  handleLeave(post.post_id);
+                                }}
+                              >
+                                <div className="flex pt-4">
+                                  <div
+                                    id="joinbutton"
+                                    className="pl-[6rem] pt-3 pr-5 font-gsr"
+                                  >
+                                    You are going to this chillout. See you!
+                                  </div>
+                                  <div className="text-[#EBA51D] bg-white rounded-2xl w-8 ml-11">
+                                    <FaChevronLeft className="mt-1 ml-[0.17rem]" />
+                                  </div>
+                                </div>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="toggle-container">
+                            <div
+                              className={`toggle-button join ${
+                                !post.is_joined_already ? "active" : ""
+                              }`}
+                            >
+                              <button
+                                onClick={() => {
+                                  handleJoin(post.post_id);
+                                }}
+                              >
+                                <div className="flex gap-1 pt-4">
+                                  <div
+                                    id="joinbutton"
+                                    className="pl-7 pt-3 pr-5 font-gsr"
+                                  >
+                                    Click to Join
+                                  </div>
+                                  <div className="text-[#EBA51D] bg-white rounded-2xl w-8">
+                                    <FaChevronRight className="mt-1 ml-[0.35rem]" />
+                                  </div>
+                                </div>
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-center mt-4">
+                        <ViewAttendees />
                       </div>
                     </div>
                   </div>
