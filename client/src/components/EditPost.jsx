@@ -6,26 +6,36 @@ const EditPost = (props) => {
   const [categoriesList, setCategoriesList] = useState("");
   const [sectionList, setSectionList] = useState([]);
   const [description, setDescription] = useState("");
-  const [datetime, setDateTime] = useState("");
+  const [datetime, setDateTime] = useState("")
   const [section, setSection] = useState("");
   const [venue, setVenue] = useState("");
   const [maxUsers, setMaxUsers] = useState("");
 
   useEffect(() => {
+    console.log(props.post, "THIS IS THE ONE")
     if (typeof props.post != "undefined") {
       console.log(props.post, "THIS IS THE ONE");
+      console.log(props.post.start_at, "THIS IS START_AT")
       setSectionList(props.post.interest);
       setDescription(props.post.description);
-      setDateTime(props.post.start_at);
+      const date = new Date(props.post.start_at)
+      const phOffset = 8; // Offset from UTC for PH is +8
+      const phTime = date.getTime() + phOffset * 60 * 60 * 1000;
+      const phDate = new Date(phTime);
+      // const localDateString =  date.toLocaleString('ko-KR', { timeZone: 'UTC' })
+      // const localDate = new Date(localDateString)
+      const localeISOString = phDate.toISOString().slice(0,-5)
+      setDateTime(localeISOString)
       setVenue(props.post.venue);
       setMaxUsers(props.post.max_users);
+
     }
   }, [props.post]);
-  const createPost = (event) => {
+  const editPost = (event) => {
     event.preventDefault();
     axios
       .put(
-        "http://localhost:8000/posts",
+        `http://localhost:8000/posts/${props.post.post_id}`,
         {
           section: section,
           description: description,
@@ -114,7 +124,7 @@ const EditPost = (props) => {
     <>
       <button onClick={() => setShowEditModal(true)}>Edit</button>
       {showEditModal ? (
-        <form onSubmit={createPost}>
+        <form onSubmit={editPost}>
           <div className="opacity-75 fixed inset-0 z-40 bg-black"></div>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-2/5 h-4/5 max-w-3xl">
@@ -206,6 +216,7 @@ const EditPost = (props) => {
                       className="w-80 border-x-0 border-t-0 text-lg"
                       id="started_at"
                       type="datetime-local"
+                      value={datetime}
                       onChange={handleChangeDateTime}
                       required={true}
                     />

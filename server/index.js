@@ -110,7 +110,7 @@ app.post("/posts", async (request, response) => {
   try {
     await pool.query("BEGIN")
     const createdPostResult = await pool.query(
-      "INSERT INTO posts (category_type_id, description, start_at, venue, created_at, max_users, user_id) VALUES ($1, $2, $3, $4, NOW(), $5, $6) RETURNING post_id, user_id",
+      "INSERT INTO posts (category_type_id, description, start_at, venue, created_at, updated_at, max_users, user_id) VALUES ($1, $2, $3, $4, NOW(), NOW(), $5, $6) RETURNING post_id, user_id",
       [section, description, datetime, venue, max_users, request.user.user_id],
     );
     const createdPost = createdPostResult.rows[0]
@@ -166,18 +166,32 @@ app.delete('/posts/:post_id', async (request, response) => {
   }
 })
 
-app.put("/posts/:post_id", async (request, response) => {
+app.put("/posts/:post_id/", async (request, response) => {
 const { post_id } = request.params
 const { section, description, datetime, venue, max_users } = request.body;
   try {
     await pool.query(
-      "UPDATE posts SET category_type_id = $1, description = $2, start_at = $3, venue = $4, max_users = $5, user_id = $6, updated_at = NOW() WHERE post_id = $7 RETURNING post_id, user_id)",
+      "UPDATE posts SET category_type_id = $1, description = $2, start_at = $3, venue = $4, max_users = $5, updated_at = NOW() WHERE user_id = $6 AND post_id = $7 RETURNING user_id, post_id",
       [section, description, datetime, venue, max_users, request.user.user_id, post_id],);
     response.status(200).send("POST UPDATED!")
     }
     catch (error) {
       console.error(error)
     }
+})
+
+app.get("/post_users/:post_id", async (request, response) => {
+  const { post_id } = request.params
+  try {
+    const postUsersResults = await pool.query(
+      "SELECT p.*, u.username FROM post_users p INNER JOIN users u ON p.user_id = u.user_id WHERE post_id = $1",
+      [post_id],
+    )
+    response.json(postUsersResults.rows)
+  }
+  catch (error) {
+    console.error(error)
+  }
 })
 
 app.get("/posts", (request, response) => {

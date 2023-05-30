@@ -1,14 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import Filters from "./Filters";
 import CreatePost from "./CreatePost";
 import { BsCalendar3 } from "react-icons/bs";
 import { MdLocationOn, MdGroups } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
-import { parseISO } from "date-fns";
 import { HiDotsVertical } from "react-icons/hi";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import EditPost from "./EditPost";
@@ -169,7 +168,7 @@ const Posts = () => {
 
                         {dropdownVisible === post.post_id && (
                           <div id="dropdown-list">
-                            <EditPost post={post} />
+                            <EditPost post={post} fetchPosts={fetchPosts} />
                             <button
                               onClick={() => handleDeletePost(post.post_id)}
                             >
@@ -193,7 +192,7 @@ const Posts = () => {
                           <span className="font-bold">{post.username}</span>
                         </div>
                         <div>
-                          {formatDistanceToNow(parseISO(post.created_at), {
+                          {formatDistanceToNow(parseISO(post.updated_at), {
                             addSuffix: true,
                           })}
                         </div>
@@ -367,7 +366,7 @@ const Posts = () => {
                         )}
                       </div>
                       <div className="text-center mt-4">
-                        <ViewAttendees />
+                        <ViewAttendees post={post}/>
                       </div>
                     </div>
                   </div>
