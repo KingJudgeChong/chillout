@@ -1,12 +1,12 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
 import Filters from "./Filters";
 import CreatePost from "./CreatePost";
 import { BsCalendar3 } from "react-icons/bs";
 import { MdLocationOn, MdGroups } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
+
 import { formatDistanceToNow } from "date-fns";
 import { HiDotsVertical } from "react-icons/hi";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
@@ -14,11 +14,9 @@ import EditPost from "./EditPost";
 import ViewAttendees from "./ViewAttendees";
 import { HiOutlinePlus } from "react-icons/hi";
 
-const Posts = () => {
-  const [searchParams] = useSearchParams();
-  const categoryId = searchParams.get("categoryId");
-  const categoryTypeId = searchParams.get("categoryTypeId");
-  const [posts, setPosts] = useState([]);
+const Posts = ({posts, fetchPosts, showLocation}) => {
+  
+  
   const user_id = Number(localStorage.getItem("user_id"));
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -31,25 +29,7 @@ const Posts = () => {
     setIsHovered(false);
   };
 
-  function fetchPosts() {
-    const url = new URL("http://localhost:8000");
-    url.pathname = "/posts";
-    Number(categoryId) && url.searchParams.append("categoryId", categoryId);
-    Number(categoryTypeId) &&
-      url.searchParams.append("categoryTypeId", categoryTypeId);
-    axios
-      .get(url, {
-        headers: { Authorization: localStorage.getItem("jwt") },
-      })
-      .then((response) => {
-        console.log(response.data, "THIS IS YOUR POSTS");
-        setPosts(response.data);
-      });
-  }
-
-  useEffect(() => {
-    fetchPosts();
-  }, [categoryId, categoryTypeId]);
+  
 
   const handleDropdownToggle = (post_id) => {
     setDropdownVisible((prevState) => (prevState === post_id ? null : post_id));
@@ -125,13 +105,14 @@ const Posts = () => {
             <CreatePost fetchPosts={fetchPosts} />
           </div>
         </div>
-        {/* <div id="locationpost" className="font-gsr mt-9 ml-2">
+        <div id="locationpost" className="font-gsr mt-9 ml-2">
           Showing ongoing chillouts around
           <span id="darkyellow" className="font-bold">
             {" "}
-            San Fernando, La Union
+            {showLocation}
+            {/* {console.log(showLocation, "SHOW LOCATION")} */}
           </span>
-        </div> */}
+        </div>
         <div className="">
           <Filters />
         </div>
@@ -308,7 +289,7 @@ const Posts = () => {
                               </button>
                             </div>
                           </div>
-                        ) : post.user_id == user_id &&
+                        ) : post.user_id === user_id &&
                           post.ongoing_count < post.max_users ? (
                           <div className="h-[74px]"></div>
                         ) : post.is_joined_already ? (

@@ -1,6 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import myimage from "../pages/images/logo/logo.png"
-const Carousel = () => {
+import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
+import axios from "axios";
+
+const Carousel = ({searchPosts}) => {
+  const [singleSelections, setSingleSelections] = useState([]);
+  const [venue, setVenue] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/posts-locations', {
+        headers: { Authorization: localStorage.getItem("jwt")},
+      })
+      .then((response) => {
+        console.log(response.data, "THIS IS TOO")
+        
+        const locations = response.data.map((ven) => {
+          console.log(ven.venue, "VEN.VENUE")
+          return ven.venue
+        })
+        let unique = [...new Set(locations)]
+        console.log(unique, "____________")
+        setVenue(unique)
+      })
+  }, [])
   return (
     <div className="h-4/6 w-full" data-testid="carousel">
       <div className="flex h-full snap-mandatory overflow-y-visible overflow-x-scroll scroll-smooth rounded-none indiana-scroll-container indiana-scroll-container--hide-scrollbars indiana-scroll-container--native-scroll">
@@ -73,29 +96,22 @@ const Carousel = () => {
         </p>
       
       </div>
+      <div className="h-16 font-gsr absolute top-[45.3%] left-[31.6%]">
+        <Typeahead
+          
+          id="basic-typeahead-single"
+          labelKey="name"
+          
+          onChange={(e) => 
+            {setSingleSelections(e);
+              searchPosts(e[0]);
+            console.log(e, "TYPEAHEAD")}}
+          options={venue.sort()}
+          placeholder="Choose a venue..."
+          selected={singleSelections}
+        />
+      </div>
 
-      {/* <div className="relative bottom-5 left-1/2 flex -translate-x-1/2 space-x-3">
-        <button
-          className="h-3 w-3 rounded-full bg-white/50 hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800"
-          data-testid="carousel-indicator"
-        ></button>
-        <button
-          className="h-3 w-3 rounded-full bg-white/50 hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800"
-          data-testid="carousel-indicator"
-        ></button>
-        <button
-          className="h-3 w-3 rounded-full bg-white/50 hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800"
-          data-testid="carousel-indicator"
-        ></button>
-        <button
-          className="h-3 w-3 rounded-full bg-white/50 hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800"
-          data-testid="carousel-indicator"
-        ></button>
-        <button
-          className="h-3 w-3 rounded-full bg-white dark:bg-gray-800"
-          data-testid="carousel-indicator"
-        ></button>
-      </div> */}
       
     </div>
   );

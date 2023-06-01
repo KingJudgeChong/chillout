@@ -7,15 +7,12 @@ const Category = () => {
   const [searchParams] = useSearchParams()
   const [categoriesList, setCategoriesList] = useState([]);
   const categoryId = searchParams.get('categoryId')
-  console.log(categoryId)
   useEffect(() => {
     axios
       .get("http://localhost:8000/categories", {
         headers: { Authorization: localStorage.getItem("jwt") },
       })
       .then((response) => {
-        console.log(localStorage.getItem("jwt"));
-        console.log(response.data);
         setCategoriesList(response.data);
       });
   }, []);

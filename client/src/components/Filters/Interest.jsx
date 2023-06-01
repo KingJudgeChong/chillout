@@ -16,7 +16,7 @@ const Type = () => {
             headers: { Authorization: localStorage.getItem("jwt") },
           })
           .then((response) => {
-            console.log(response.data);
+
             setSectionList(response.data);
           });
   },[categoryId])

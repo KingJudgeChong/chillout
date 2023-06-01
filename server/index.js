@@ -194,6 +194,19 @@ app.get("/post_users/:post_id", async (request, response) => {
   }
 })
 
+app.get("/posts-locations", async (request, response) => {
+  try {
+    const postVenueResults = await pool.query(
+    "SELECT venue FROM posts",
+  [],
+   )
+   response.json(postVenueResults.rows)
+    }
+    catch (error) {
+      console.error(error)
+    }
+})
+
 app.get("/posts", (request, response) => {
   const { categoryId, categoryTypeId } = request.query;
   if (categoryId && categoryTypeId) {

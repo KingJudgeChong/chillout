@@ -66,15 +66,12 @@ const CreatePost = (props) => {
         headers: { Authorization: localStorage.getItem("jwt") },
       })
       .then((response) => {
-        console.log(localStorage.getItem("jwt"));
-        console.log(response.data);
         setCategoriesList(response.data);
         axios
           .get(`http://localhost:8000/categories/1/category_types`, {
             headers: { Authorization: localStorage.getItem("jwt") },
           })
           .then((response) => {
-            console.log(response.data);
             setSectionList(response.data);
             setSection(response.data[0].id);
           });

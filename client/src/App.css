@@ -542,3 +542,31 @@
   background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='6' stroke-dasharray='8%2c 19' stroke-dashoffset='40' stroke-linecap='square'/%3e%3c/svg%3e");
 }
 
+.dropdown-menu {
+  display: flex !important;
+  flex-direction: column;
+  background: white;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  z-index: 100;
+}
+
+.dropdown-item:hover{
+  background-color: rgb(93, 93, 222);
+  color: white;
+
+}
+
+
+
+.rbt {
+  height: 51px;
+}
+
+.rbt input {
+  border-radius: 8px;
+  padding-top: 20px;
+  width: auto;
+  min-width: 570px;
+}

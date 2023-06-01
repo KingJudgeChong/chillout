@@ -7,7 +7,8 @@ import { BrowserRouter} from 'react-router-dom'
 // import Home from "./pages/Home";
 import App from './App';
 // import Profile from "./pages/Profile";
-
+// import 'react-bootstrap/dist/';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
