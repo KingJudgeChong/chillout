@@ -158,7 +158,7 @@ const CreatePost = (props) => {
 
                   <div>
                     <textarea
-                      className="w-96 border-x-0 border-t-0"
+                      className="w-80 border-x-0 border-t-0"
                       id="description"
                       type="textarea"
                       rows="3"

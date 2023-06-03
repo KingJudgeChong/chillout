@@ -6,7 +6,6 @@ import Filters from "./Filters";
 import CreatePost from "./CreatePost";
 import { BsCalendar3 } from "react-icons/bs";
 import { MdLocationOn, MdGroups } from "react-icons/md";
-
 import { formatDistanceToNow } from "date-fns";
 import { HiDotsVertical } from "react-icons/hi";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
@@ -14,9 +13,7 @@ import EditPost from "./EditPost";
 import ViewAttendees from "./ViewAttendees";
 import { HiOutlinePlus } from "react-icons/hi";
 
-const Posts = ({posts, fetchPosts, showLocation}) => {
-  
-  
+const Posts = ({ posts, fetchPosts, showLocation }) => {
   const user_id = Number(localStorage.getItem("user_id"));
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -28,8 +25,6 @@ const Posts = ({posts, fetchPosts, showLocation}) => {
   const CloseHover = () => {
     setIsHovered(false);
   };
-
-  
 
   const handleDropdownToggle = (post_id) => {
     setDropdownVisible((prevState) => (prevState === post_id ? null : post_id));
@@ -118,8 +113,13 @@ const Posts = ({posts, fetchPosts, showLocation}) => {
         </div>
         <div id="allposts" className="grid grid-cols-2">
           {posts.length === 0 ? (
-            <div id="user_post2" className="shadow-2xl text-center font-gsr text-[26px] py-[50%] text-[#AFAFAF]">
-              <div className="mx-[46%] mb-4 text-[48px]"><HiOutlinePlus /></div>
+            <div
+              id="user_post2"
+              className="shadow-2xl text-center font-gsr text-[26px] py-[50%] text-[#AFAFAF]"
+            >
+              <div className="mx-[46%] mb-4 text-[48px]">
+                <HiOutlinePlus />
+              </div>
               <div className="font-bold">Post a Chillout</div>
             </div>
           ) : (
@@ -179,13 +179,21 @@ const Posts = ({posts, fetchPosts, showLocation}) => {
                         </div>
                       </div>
                     </div>
-
+                    {post.ongoing_count > 1 ?  (
                     <div
                       id="upperright"
                       className="font-gsr font-bold tracking-wider"
                     >
+                      
                       {post.ongoing_count} <span>are going</span>
-                    </div>
+                    </div>) : (
+                      <div
+                      id="upperright"
+                      className="font-gsr font-bold tracking-wider"
+                    >
+                      {post.ongoing_count} <span>is going</span>
+                      </div>
+                    )}
                   </div>
                   <div className="h-auto">
                     <p id="yellowpost" className="w-11 font-gsr text-white ">
@@ -203,7 +211,6 @@ const Posts = ({posts, fetchPosts, showLocation}) => {
                         <BsCalendar3 />
                       </div>
                       <div className="font-gsr">
-                        Date and Time:
                         <span className="font-gsr font-bold">
                           {" "}
                           {format(
@@ -218,7 +225,6 @@ const Posts = ({posts, fetchPosts, showLocation}) => {
                         <MdLocationOn />
                       </div>
                       <div className="font-gsr">
-                        Meetup Place:
                         <span className="font-gsr font-bold">
                           {" "}
                           {post.venue}
@@ -230,10 +236,9 @@ const Posts = ({posts, fetchPosts, showLocation}) => {
                         <MdGroups />
                       </div>
                       <div className="font-gsr">
-                        Group Limit:
                         <span className="font-gsr font-bold">
                           {" "}
-                          {post.max_users}
+                          Max of {post.max_users} people
                         </span>
                       </div>
                     </div>
@@ -347,7 +352,7 @@ const Posts = ({posts, fetchPosts, showLocation}) => {
                         )}
                       </div>
                       <div className="text-center mt-4">
-                        <ViewAttendees post={post}/>
+                        <ViewAttendees post={post} />
                       </div>
                     </div>
                   </div>

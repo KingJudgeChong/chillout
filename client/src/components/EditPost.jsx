@@ -199,7 +199,7 @@ const EditPost = (props) => {
 
                   <div>
                     <textarea
-                      className="w-96 border-x-0 border-t-0"
+                      className="w-80 border-x-0 border-t-0"
                       id="description"
                       type="textarea"
                       value={description}
@@ -257,11 +257,11 @@ const EditPost = (props) => {
                   >
                     Close
                   </button>
-                  <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  <button id="green"
+                    className="text-white font-bold uppercase text-sm px-6 rounded shadow hover:shadow-lg mr-1 -mt-3"
                     type="submit"
                   >
-                    Save
+                    <span>Save</span>
                   </button>
                 </div>
               </div>

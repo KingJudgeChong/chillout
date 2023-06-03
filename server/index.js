@@ -104,6 +104,7 @@ app.post("/auth", (request, response) => {
   );
 });
 
+
 app.use(auth);
 app.post("/posts", async (request, response) => {
   const { section, description, datetime, venue, max_users } = request.body;
