@@ -49,7 +49,14 @@ const CreatePost = (props) => {
   };
 
   const handleChangeDateTime = (event) => {
-    setDateTime(event.target.value);
+    if (new Date(event.target.value) < new Date()) {
+      alert("not a valid date")
+      return event.target.value = null
+    }
+    else {
+      setDateTime(event.target.value)
+      return true
+    }
   };
 
   const handleChangeVenue = (event) => {
@@ -172,7 +179,7 @@ const CreatePost = (props) => {
                     {/* when clicked, open calendar */}
                     <input
                       className="w-80 border-x-0 border-t-0 text-lg"
-                      id="started_at"
+                      id="datePicker"
                       type="datetime-local"
                       onChange={handleChangeDateTime}
                       required={true}

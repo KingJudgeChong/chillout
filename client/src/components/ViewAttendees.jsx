@@ -5,6 +5,9 @@ const ViewAttendees = (props) => {
   const [postUsers, setPostUsers] = useState([])
 
   useEffect(() => {
+    if (showModal === false) {
+      return
+    }
     axios
       .get(`http://localhost:8000/post_users/${props.post.post_id}`, {
         headers: { Authorization: localStorage.getItem("jwt")},
@@ -12,7 +15,7 @@ const ViewAttendees = (props) => {
       .then((response) => {
         setPostUsers(response.data)
       })
-  }, [props.post.post_id])
+  }, [props.post.post_id, showModal])
 
   const toggleModal = () => {
     setShowModal(!showModal);
